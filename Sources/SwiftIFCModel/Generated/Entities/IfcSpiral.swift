@@ -1,0 +1,19 @@
+// IfcSpiral.swift
+// Auto-generated from IFC4X3_ADD2.xsd — DO NOT EDIT
+import Foundation
+
+extension IFC4X3 {
+    public class IfcSpiral: IfcCurve, @unchecked Sendable { // ABSTRACT
+        public var position: IfcAxis2Placement
+
+        public init(
+            styledByItem: IfcStyledItem? = nil,
+            position: IfcAxis2Placement
+        ) {
+            self.position = position
+            super.init(
+                styledByItem: styledByItem
+            )
+        }
+    }
+}
