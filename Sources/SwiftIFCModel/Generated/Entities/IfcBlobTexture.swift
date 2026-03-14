@@ -5,7 +5,7 @@ import Foundation
 extension IFC4X3 {
     public class IfcBlobTexture: IfcSurfaceTexture, @unchecked Sendable {
         public var rasterFormat: IfcIdentifier? = nil
-        public var rasterCode: IfcBinary
+        public var rasterCode: IfcBinary? = nil
 
         public init(
             repeatS: IfcBoolean? = nil,
@@ -14,7 +14,7 @@ extension IFC4X3 {
             parameter: [IfcIdentifier] = [],
             textureTransform: IfcCartesianTransformationOperator2D? = nil,
             rasterFormat: IfcIdentifier? = nil,
-            rasterCode: IfcBinary
+            rasterCode: IfcBinary? = nil
         ) {
             self.rasterFormat = rasterFormat
             self.rasterCode = rasterCode

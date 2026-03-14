@@ -4,7 +4,7 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcRelAssignsToProduct: IfcRelAssigns, @unchecked Sendable {
-        public var relatingProduct: IfcProductSelect
+        public var relatingProduct: IfcProductSelect? = nil
 
         public init(
             globalId: IfcGloballyUniqueId? = nil,
@@ -13,7 +13,7 @@ extension IFC4X3 {
             ownerHistory: IfcOwnerHistory? = nil,
             relatedObjectsType: IfcStrippedOptional? = nil,
             relatedObjects: [IfcObjectDefinition] = [],
-            relatingProduct: IfcProductSelect
+            relatingProduct: IfcProductSelect? = nil
         ) {
             self.relatingProduct = relatingProduct
             super.init(

@@ -4,11 +4,11 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcCsgSolid: IfcSolidModel, @unchecked Sendable {
-        public var treeRootExpression: IfcCsgSelect
+        public var treeRootExpression: IfcCsgSelect? = nil
 
         public init(
             styledByItem: IfcStyledItem? = nil,
-            treeRootExpression: IfcCsgSelect
+            treeRootExpression: IfcCsgSelect? = nil
         ) {
             self.treeRootExpression = treeRootExpression
             super.init(

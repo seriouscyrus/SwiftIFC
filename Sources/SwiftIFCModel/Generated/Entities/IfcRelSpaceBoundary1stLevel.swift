@@ -13,7 +13,7 @@ extension IFC4X3 {
             ownerHistory: IfcOwnerHistory? = nil,
             physicalOrVirtualBoundary: IfcPhysicalOrVirtualEnum? = nil,
             internalOrExternalBoundary: IfcInternalOrExternalEnum? = nil,
-            relatingSpace: IfcSpaceBoundarySelect,
+            relatingSpace: IfcSpaceBoundarySelect? = nil,
             relatedBuildingElement: IfcElement? = nil,
             connectionGeometry: IfcConnectionGeometry? = nil,
             parentBoundary: IfcRelSpaceBoundary1stLevel? = nil

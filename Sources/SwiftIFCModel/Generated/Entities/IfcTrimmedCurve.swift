@@ -7,16 +7,16 @@ extension IFC4X3 {
         public var senseAgreement: IfcBoolean? = nil
         public var masterRepresentation: IfcTrimmingPreference? = nil
         public var basisCurve: IfcCurve? = nil
-        public var trim1: IfcTrimmingSelect
-        public var trim2: IfcTrimmingSelect
+        public var trim1: IfcTrimmingSelect? = nil
+        public var trim2: IfcTrimmingSelect? = nil
 
         public init(
             styledByItem: IfcStyledItem? = nil,
             senseAgreement: IfcBoolean? = nil,
             masterRepresentation: IfcTrimmingPreference? = nil,
             basisCurve: IfcCurve? = nil,
-            trim1: IfcTrimmingSelect,
-            trim2: IfcTrimmingSelect
+            trim1: IfcTrimmingSelect? = nil,
+            trim2: IfcTrimmingSelect? = nil
         ) {
             self.senseAgreement = senseAgreement
             self.masterRepresentation = masterRepresentation

@@ -4,14 +4,14 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcRelReferencedInSpatialStructure: IfcRelConnects, @unchecked Sendable {
-        public var relatedElements: IfcSpatialReferenceSelect
+        public var relatedElements: IfcSpatialReferenceSelect? = nil
 
         public init(
             globalId: IfcGloballyUniqueId? = nil,
             name: IfcLabel? = nil,
             description: IfcText? = nil,
             ownerHistory: IfcOwnerHistory? = nil,
-            relatedElements: IfcSpatialReferenceSelect
+            relatedElements: IfcSpatialReferenceSelect? = nil
         ) {
             self.relatedElements = relatedElements
             super.init(

@@ -12,7 +12,7 @@ extension IFC4X3 {
             name: IfcLabel? = nil,
             description: IfcText? = nil,
             ownerHistory: IfcOwnerHistory? = nil,
-            relatedObjects: IfcDefinitionSelect,
+            relatedObjects: IfcDefinitionSelect? = nil,
             intent: IfcLabel? = nil,
             relatingConstraint: IfcConstraint? = nil
         ) {

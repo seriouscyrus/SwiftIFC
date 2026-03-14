@@ -6,7 +6,7 @@ extension IFC4X3 {
     public class IfcFillAreaStyleHatching: IfcGeometricRepresentationItem, @unchecked Sendable {
         public var hatchLineAngle: IfcPlaneAngleMeasure? = nil
         public var hatchLineAppearance: IfcCurveStyle? = nil
-        public var startOfNextHatchLine: IfcHatchLineDistanceSelect
+        public var startOfNextHatchLine: IfcHatchLineDistanceSelect? = nil
         public var pointOfReferenceHatchLine: IfcCartesianPoint? = nil
         public var patternStart: IfcCartesianPoint? = nil
 
@@ -14,7 +14,7 @@ extension IFC4X3 {
             styledByItem: IfcStyledItem? = nil,
             hatchLineAngle: IfcPlaneAngleMeasure? = nil,
             hatchLineAppearance: IfcCurveStyle? = nil,
-            startOfNextHatchLine: IfcHatchLineDistanceSelect,
+            startOfNextHatchLine: IfcHatchLineDistanceSelect? = nil,
             pointOfReferenceHatchLine: IfcCartesianPoint? = nil,
             patternStart: IfcCartesianPoint? = nil
         ) {

@@ -4,11 +4,11 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcLocalPlacement: IfcObjectPlacement, @unchecked Sendable {
-        public var relativePlacement: IfcAxis2Placement
+        public var relativePlacement: IfcAxis2Placement? = nil
 
         public init(
             placementRelTo: IfcObjectPlacement? = nil,
-            relativePlacement: IfcAxis2Placement
+            relativePlacement: IfcAxis2Placement? = nil
         ) {
             self.relativePlacement = relativePlacement
             super.init(

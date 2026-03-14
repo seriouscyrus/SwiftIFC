@@ -4,10 +4,10 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcTimeSeriesValue: Entity {
-        public var listValues: IfcValue
+        public var listValues: IfcValue? = nil
 
         public init(
-            listValues: IfcValue
+            listValues: IfcValue? = nil
         ) {
             self.listValues = listValues
             super.init()

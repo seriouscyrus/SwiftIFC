@@ -4,11 +4,11 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcConnectionSurfaceGeometry: IfcConnectionGeometry, @unchecked Sendable {
-        public var surfaceOnRelatingElement: IfcSurfaceOrFaceSurface
+        public var surfaceOnRelatingElement: IfcSurfaceOrFaceSurface? = nil
         public var surfaceOnRelatedElement: IfcSurfaceOrFaceSurface? = nil
 
         public init(
-            surfaceOnRelatingElement: IfcSurfaceOrFaceSurface,
+            surfaceOnRelatingElement: IfcSurfaceOrFaceSurface? = nil,
             surfaceOnRelatedElement: IfcSurfaceOrFaceSurface? = nil
         ) {
             self.surfaceOnRelatingElement = surfaceOnRelatingElement

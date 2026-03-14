@@ -2,7 +2,14 @@ import Foundation
 
 struct SwiftCodeGenerator {
     let schema: IFCSchema
+    let expressSchema: EXPRESSSchema?
     let outputDir: String
+
+    init(schema: IFCSchema, expressSchema: EXPRESSSchema? = nil, outputDir: String) {
+        self.schema = schema
+        self.expressSchema = expressSchema
+        self.outputDir = outputDir
+    }
 
     func generate() throws {
         let fm = FileManager.default
@@ -55,8 +62,47 @@ struct SwiftCodeGenerator {
         }
         print("  Generated \(entityCount) entity class files in Entities/")
 
+        // 6. STEP support (requires EXPRESS schema)
+        if let express = expressSchema {
+            try generateSTEPFiles(expressSchema: express)
+        }
+
         print("\nCode generation complete!")
         print("  Output directory: \(outputDir)")
+    }
+
+    // MARK: - STEP Code Generation
+
+    private func generateSTEPFiles(expressSchema: EXPRESSSchema) throws {
+        // 6a. STEP protocol definitions
+        let protocolGen = STEPProtocolGenerator()
+        let protocolContent = protocolGen.generate()
+        try write(protocolContent, to: "STEPProtocol.swift")
+        print("  Generated STEPProtocol.swift")
+
+        // 6b. STEP entity conformances
+        let metadataGen = STEPMetadataGenerator(xsdSchema: schema, expressSchema: expressSchema)
+        let conformances = metadataGen.generate()
+        try write(conformances, to: "STEPEntityConformances.swift")
+        print("  Generated STEPEntityConformances.swift")
+
+        // 6c. STEP entity registry
+        let registryGen = STEPRegistryGenerator(schema: schema)
+        let registry = registryGen.generate()
+        try write(registry, to: "STEPEntityRegistry.swift")
+        print("  Generated STEPEntityRegistry.swift")
+
+        // 6d. STEP SELECT encoding
+        let selectEncGen = STEPSelectEncodingGenerator(schema: schema)
+        let selectEnc = selectEncGen.generate()
+        try write(selectEnc, to: "STEPSelectEncoding.swift")
+        print("  Generated STEPSelectEncoding.swift")
+
+        // 6e. STEP enum encoding
+        let enumEncGen = STEPEnumEncodingGenerator(schema: schema)
+        let enumEnc = enumEncGen.generate()
+        try write(enumEnc, to: "STEPEnumEncoding.swift")
+        print("  Generated STEPEnumEncoding.swift")
     }
 
     private func write(_ content: String, to fileName: String) throws {

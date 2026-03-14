@@ -13,7 +13,7 @@ extension IFC4X3 {
             contextType: IfcLabel? = nil,
             coordinateSpaceDimension: IfcDimensionCount? = nil,
             precision: IfcReal? = nil,
-            worldCoordinateSystem: IfcAxis2Placement,
+            worldCoordinateSystem: IfcAxis2Placement? = nil,
             trueNorth: IfcDirection? = nil,
             hasSubContexts: [IfcGeometricRepresentationSubContext] = [],
             hasCoordinateOperation: IfcCoordinateOperation? = nil,

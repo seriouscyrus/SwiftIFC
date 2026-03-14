@@ -4,7 +4,7 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcRelAssignsToProcess: IfcRelAssigns, @unchecked Sendable {
-        public var relatingProcess: IfcProcessSelect
+        public var relatingProcess: IfcProcessSelect? = nil
         public var quantityInProcess: IfcMeasureWithUnit? = nil
 
         public init(
@@ -14,7 +14,7 @@ extension IFC4X3 {
             ownerHistory: IfcOwnerHistory? = nil,
             relatedObjectsType: IfcStrippedOptional? = nil,
             relatedObjects: [IfcObjectDefinition] = [],
-            relatingProcess: IfcProcessSelect,
+            relatingProcess: IfcProcessSelect? = nil,
             quantityInProcess: IfcMeasureWithUnit? = nil
         ) {
             self.relatingProcess = relatingProcess

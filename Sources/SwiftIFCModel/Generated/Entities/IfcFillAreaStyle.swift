@@ -5,12 +5,12 @@ import Foundation
 extension IFC4X3 {
     public class IfcFillAreaStyle: IfcPresentationStyle, @unchecked Sendable {
         public var modelOrDraughting: IfcBoolean? = nil
-        public var fillStyles: IfcFillStyleSelect
+        public var fillStyles: IfcFillStyleSelect? = nil
 
         public init(
             name: IfcLabel? = nil,
             modelOrDraughting: IfcBoolean? = nil,
-            fillStyles: IfcFillStyleSelect
+            fillStyles: IfcFillStyleSelect? = nil
         ) {
             self.modelOrDraughting = modelOrDraughting
             self.fillStyles = fillStyles

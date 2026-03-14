@@ -9,7 +9,7 @@ extension IFC4X3 {
 
         public init(
             styledByItem: IfcStyledItem? = nil,
-            position: IfcAxis2Placement,
+            position: IfcAxis2Placement? = nil,
             semiAxis1: IfcPositiveLengthMeasure? = nil,
             semiAxis2: IfcPositiveLengthMeasure? = nil
         ) {

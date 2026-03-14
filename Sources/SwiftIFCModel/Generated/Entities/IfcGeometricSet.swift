@@ -4,11 +4,11 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcGeometricSet: IfcGeometricRepresentationItem, @unchecked Sendable {
-        public var elements: IfcGeometricSetSelect
+        public var elements: IfcGeometricSetSelect? = nil
 
         public init(
             styledByItem: IfcStyledItem? = nil,
-            elements: IfcGeometricSetSelect
+            elements: IfcGeometricSetSelect? = nil
         ) {
             self.elements = elements
             super.init(

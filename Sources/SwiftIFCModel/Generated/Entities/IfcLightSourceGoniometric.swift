@@ -9,7 +9,7 @@ extension IFC4X3 {
         public var lightEmissionSource: IfcLightEmissionSourceEnum? = nil
         public var position: IfcAxis2Placement3D? = nil
         public var colourAppearance: IfcColourRgb? = nil
-        public var lightDistributionDataSource: IfcLightDistributionDataSourceSelect
+        public var lightDistributionDataSource: IfcLightDistributionDataSourceSelect? = nil
 
         public init(
             styledByItem: IfcStyledItem? = nil,
@@ -22,7 +22,7 @@ extension IFC4X3 {
             lightEmissionSource: IfcLightEmissionSourceEnum? = nil,
             position: IfcAxis2Placement3D? = nil,
             colourAppearance: IfcColourRgb? = nil,
-            lightDistributionDataSource: IfcLightDistributionDataSourceSelect
+            lightDistributionDataSource: IfcLightDistributionDataSourceSelect? = nil
         ) {
             self.colourTemperature = colourTemperature
             self.luminousFlux = luminousFlux

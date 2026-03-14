@@ -11,7 +11,7 @@ extension IFC4X3 {
 
         public init(
             styledByItem: IfcStyledItem? = nil,
-            position: IfcAxis2Placement,
+            position: IfcAxis2Placement? = nil,
             cubicTerm: IfcLengthMeasure? = nil,
             quadraticTerm: IfcLengthMeasure? = nil,
             linearTerm: IfcLengthMeasure? = nil,

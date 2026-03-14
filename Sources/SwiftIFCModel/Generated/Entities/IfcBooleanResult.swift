@@ -5,14 +5,14 @@ import Foundation
 extension IFC4X3 {
     public class IfcBooleanResult: IfcGeometricRepresentationItem, @unchecked Sendable {
         public var `operator`: IfcBooleanOperator? = nil
-        public var firstOperand: IfcBooleanOperand
-        public var secondOperand: IfcBooleanOperand
+        public var firstOperand: IfcBooleanOperand? = nil
+        public var secondOperand: IfcBooleanOperand? = nil
 
         public init(
             styledByItem: IfcStyledItem? = nil,
             `operator`: IfcBooleanOperator? = nil,
-            firstOperand: IfcBooleanOperand,
-            secondOperand: IfcBooleanOperand
+            firstOperand: IfcBooleanOperand? = nil,
+            secondOperand: IfcBooleanOperand? = nil
         ) {
             self.`operator` = `operator`
             self.firstOperand = firstOperand

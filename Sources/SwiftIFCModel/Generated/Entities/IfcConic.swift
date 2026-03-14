@@ -4,11 +4,11 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcConic: IfcCurve, @unchecked Sendable { // ABSTRACT
-        public var position: IfcAxis2Placement
+        public var position: IfcAxis2Placement? = nil
 
         public init(
             styledByItem: IfcStyledItem? = nil,
-            position: IfcAxis2Placement
+            position: IfcAxis2Placement? = nil
         ) {
             self.position = position
             super.init(

@@ -11,7 +11,7 @@ extension IFC4X3 {
             styledByItem: IfcStyledItem? = nil,
             literal: IfcPresentableText? = nil,
             path: IfcTextPath? = nil,
-            placement: IfcAxis2Placement,
+            placement: IfcAxis2Placement? = nil,
             boxAlignment: IfcBoxAlignment? = nil,
             extent: IfcPlanarExtent? = nil
         ) {

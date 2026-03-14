@@ -4,11 +4,11 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcTextStyleForDefinedFont: IfcPresentationItem, @unchecked Sendable {
-        public var colour: IfcColour
+        public var colour: IfcColour? = nil
         public var backgroundColour: IfcColour? = nil
 
         public init(
-            colour: IfcColour,
+            colour: IfcColour? = nil,
             backgroundColour: IfcColour? = nil
         ) {
             self.colour = colour

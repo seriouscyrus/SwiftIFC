@@ -6,12 +6,12 @@ extension IFC4X3 {
     public class IfcCurveStyleFontAndScaling: IfcPresentationItem, @unchecked Sendable {
         public var name: IfcLabel? = nil
         public var curveFontScaling: IfcPositiveRatioMeasure? = nil
-        public var curveStyleFont: IfcCurveStyleFontSelect
+        public var curveStyleFont: IfcCurveStyleFontSelect? = nil
 
         public init(
             name: IfcLabel? = nil,
             curveFontScaling: IfcPositiveRatioMeasure? = nil,
-            curveStyleFont: IfcCurveStyleFontSelect
+            curveStyleFont: IfcCurveStyleFontSelect? = nil
         ) {
             self.name = name
             self.curveFontScaling = curveFontScaling

@@ -5,16 +5,16 @@ import Foundation
 extension IFC4X3 {
     public class IfcCurveSegment: IfcSegment, @unchecked Sendable {
         public var placement: IfcPlacement? = nil
-        public var segmentStart: IfcCurveMeasureSelect
-        public var segmentLength: IfcCurveMeasureSelect
+        public var segmentStart: IfcCurveMeasureSelect? = nil
+        public var segmentLength: IfcCurveMeasureSelect? = nil
         public var parentCurve: IfcCurve? = nil
 
         public init(
             styledByItem: IfcStyledItem? = nil,
             transition: IfcTransitionCode? = nil,
             placement: IfcPlacement? = nil,
-            segmentStart: IfcCurveMeasureSelect,
-            segmentLength: IfcCurveMeasureSelect,
+            segmentStart: IfcCurveMeasureSelect? = nil,
+            segmentLength: IfcCurveMeasureSelect? = nil,
             parentCurve: IfcCurve? = nil
         ) {
             self.placement = placement

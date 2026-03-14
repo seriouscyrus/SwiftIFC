@@ -4,11 +4,11 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcShellBasedSurfaceModel: IfcGeometricRepresentationItem, @unchecked Sendable {
-        public var sbsmBoundary: IfcShell
+        public var sbsmBoundary: IfcShell? = nil
 
         public init(
             styledByItem: IfcStyledItem? = nil,
-            sbsmBoundary: IfcShell
+            sbsmBoundary: IfcShell? = nil
         ) {
             self.sbsmBoundary = sbsmBoundary
             super.init(

@@ -4,11 +4,11 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcConnectionVolumeGeometry: IfcConnectionGeometry, @unchecked Sendable {
-        public var volumeOnRelatingElement: IfcSolidOrShell
+        public var volumeOnRelatingElement: IfcSolidOrShell? = nil
         public var volumeOnRelatedElement: IfcSolidOrShell? = nil
 
         public init(
-            volumeOnRelatingElement: IfcSolidOrShell,
+            volumeOnRelatingElement: IfcSolidOrShell? = nil,
             volumeOnRelatedElement: IfcSolidOrShell? = nil
         ) {
             self.volumeOnRelatingElement = volumeOnRelatingElement

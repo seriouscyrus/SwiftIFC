@@ -8,7 +8,7 @@ extension IFC4X3 {
         public var fontVariant: IfcFontVariant? = nil
         public var fontWeight: IfcFontWeight? = nil
         public var fontFamily: [IfcTextFontName] = []
-        public var fontSize: IfcSizeSelect
+        public var fontSize: IfcSizeSelect? = nil
 
         public init(
             name: IfcLabel? = nil,
@@ -16,7 +16,7 @@ extension IFC4X3 {
             fontVariant: IfcFontVariant? = nil,
             fontWeight: IfcFontWeight? = nil,
             fontFamily: [IfcTextFontName] = [],
-            fontSize: IfcSizeSelect
+            fontSize: IfcSizeSelect? = nil
         ) {
             self.fontStyle = fontStyle
             self.fontVariant = fontVariant

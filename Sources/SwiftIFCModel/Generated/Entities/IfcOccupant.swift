@@ -17,7 +17,7 @@ extension IFC4X3 {
             isDeclaredBy: IfcRelDefinesByObject? = nil,
             isTypedBy: IfcRelDefinesByType? = nil,
             isDefinedBy: [IfcRelDefinesByProperties] = [],
-            theActor: IfcActorSelect,
+            theActor: IfcActorSelect? = nil,
             predefinedType: IfcOccupantTypeEnum? = nil
         ) {
             self.predefinedType = predefinedType

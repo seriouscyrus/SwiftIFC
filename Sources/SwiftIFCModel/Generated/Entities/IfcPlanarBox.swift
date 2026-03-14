@@ -4,13 +4,13 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcPlanarBox: IfcPlanarExtent, @unchecked Sendable {
-        public var placement: IfcAxis2Placement
+        public var placement: IfcAxis2Placement? = nil
 
         public init(
             styledByItem: IfcStyledItem? = nil,
             sizeInX: IfcLengthMeasure? = nil,
             sizeInY: IfcLengthMeasure? = nil,
-            placement: IfcAxis2Placement
+            placement: IfcAxis2Placement? = nil
         ) {
             self.placement = placement
             super.init(

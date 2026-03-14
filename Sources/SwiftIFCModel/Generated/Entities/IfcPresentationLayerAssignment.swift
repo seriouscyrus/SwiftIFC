@@ -7,13 +7,13 @@ extension IFC4X3 {
         public var name: IfcLabel? = nil
         public var description: IfcText? = nil
         public var identifier: IfcIdentifier? = nil
-        public var assignedItems: IfcLayeredItem
+        public var assignedItems: IfcLayeredItem? = nil
 
         public init(
             name: IfcLabel? = nil,
             description: IfcText? = nil,
             identifier: IfcIdentifier? = nil,
-            assignedItems: IfcLayeredItem
+            assignedItems: IfcLayeredItem? = nil
         ) {
             self.name = name
             self.description = description

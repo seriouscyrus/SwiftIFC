@@ -4,12 +4,12 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcMeasureWithUnit: Entity {
-        public var valueComponent: IfcValue
-        public var unitComponent: IfcUnit
+        public var valueComponent: IfcValue? = nil
+        public var unitComponent: IfcUnit? = nil
 
         public init(
-            valueComponent: IfcValue,
-            unitComponent: IfcUnit
+            valueComponent: IfcValue? = nil,
+            unitComponent: IfcUnit? = nil
         ) {
             self.valueComponent = valueComponent
             self.unitComponent = unitComponent

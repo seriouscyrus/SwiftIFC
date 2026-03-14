@@ -4,14 +4,14 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcRelAssociates: IfcRelationship, @unchecked Sendable { // ABSTRACT
-        public var relatedObjects: IfcDefinitionSelect
+        public var relatedObjects: IfcDefinitionSelect? = nil
 
         public init(
             globalId: IfcGloballyUniqueId? = nil,
             name: IfcLabel? = nil,
             description: IfcText? = nil,
             ownerHistory: IfcOwnerHistory? = nil,
-            relatedObjects: IfcDefinitionSelect
+            relatedObjects: IfcDefinitionSelect? = nil
         ) {
             self.relatedObjects = relatedObjects
             super.init(

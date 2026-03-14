@@ -5,12 +5,12 @@ import Foundation
 extension IFC4X3 {
     public class IfcPropertyEnumeration: IfcPropertyAbstraction, @unchecked Sendable {
         public var name: IfcLabel? = nil
-        public var enumerationValues: IfcValue
+        public var enumerationValues: IfcValue? = nil
         public var unit: IfcUnit? = nil
 
         public init(
             name: IfcLabel? = nil,
-            enumerationValues: IfcValue,
+            enumerationValues: IfcValue? = nil,
             unit: IfcUnit? = nil
         ) {
             self.name = name

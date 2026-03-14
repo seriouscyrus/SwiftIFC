@@ -7,14 +7,14 @@ extension IFC4X3 {
         public var modelOrDraughting: IfcBoolean? = nil
         public var textCharacterAppearance: IfcTextStyleForDefinedFont? = nil
         public var textStyle: IfcTextStyleTextModel? = nil
-        public var textFontStyle: IfcTextFontSelect
+        public var textFontStyle: IfcTextFontSelect? = nil
 
         public init(
             name: IfcLabel? = nil,
             modelOrDraughting: IfcBoolean? = nil,
             textCharacterAppearance: IfcTextStyleForDefinedFont? = nil,
             textStyle: IfcTextStyleTextModel? = nil,
-            textFontStyle: IfcTextFontSelect
+            textFontStyle: IfcTextFontSelect? = nil
         ) {
             self.modelOrDraughting = modelOrDraughting
             self.textCharacterAppearance = textCharacterAppearance

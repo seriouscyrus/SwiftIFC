@@ -6,13 +6,13 @@ extension IFC4X3 {
     public class IfcTextLiteral: IfcGeometricRepresentationItem, @unchecked Sendable {
         public var literal: IfcPresentableText? = nil
         public var path: IfcTextPath? = nil
-        public var placement: IfcAxis2Placement
+        public var placement: IfcAxis2Placement? = nil
 
         public init(
             styledByItem: IfcStyledItem? = nil,
             literal: IfcPresentableText? = nil,
             path: IfcTextPath? = nil,
-            placement: IfcAxis2Placement
+            placement: IfcAxis2Placement? = nil
         ) {
             self.literal = literal
             self.path = path

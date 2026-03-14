@@ -5,12 +5,12 @@ import Foundation
 extension IFC4X3 {
     public class IfcSurfaceStyle: IfcPresentationStyle, @unchecked Sendable {
         public var side: IfcSurfaceSide? = nil
-        public var styles: IfcSurfaceStyleElementSelect
+        public var styles: IfcSurfaceStyleElementSelect? = nil
 
         public init(
             name: IfcLabel? = nil,
             side: IfcSurfaceSide? = nil,
-            styles: IfcSurfaceStyleElementSelect
+            styles: IfcSurfaceStyleElementSelect? = nil
         ) {
             self.side = side
             self.styles = styles

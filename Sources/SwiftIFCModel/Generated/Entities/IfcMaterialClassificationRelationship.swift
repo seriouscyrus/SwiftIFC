@@ -4,11 +4,11 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcMaterialClassificationRelationship: Entity {
-        public var materialClassifications: IfcClassificationSelect
+        public var materialClassifications: IfcClassificationSelect? = nil
         public var classifiedMaterial: IfcMaterial? = nil
 
         public init(
-            materialClassifications: IfcClassificationSelect,
+            materialClassifications: IfcClassificationSelect? = nil,
             classifiedMaterial: IfcMaterial? = nil
         ) {
             self.materialClassifications = materialClassifications

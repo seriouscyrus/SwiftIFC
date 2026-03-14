@@ -4,11 +4,11 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcConnectionPointGeometry: IfcConnectionGeometry, @unchecked Sendable {
-        public var pointOnRelatingElement: IfcPointOrVertexPoint
+        public var pointOnRelatingElement: IfcPointOrVertexPoint? = nil
         public var pointOnRelatedElement: IfcPointOrVertexPoint? = nil
 
         public init(
-            pointOnRelatingElement: IfcPointOrVertexPoint,
+            pointOnRelatingElement: IfcPointOrVertexPoint? = nil,
             pointOnRelatedElement: IfcPointOrVertexPoint? = nil
         ) {
             self.pointOnRelatingElement = pointOnRelatingElement

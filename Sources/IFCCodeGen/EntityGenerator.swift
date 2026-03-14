@@ -82,10 +82,12 @@ struct EntityGenerator {
                     isInherited: false
                 ))
             } else {
+                // Make non-optional simple attributes optional with nil default
+                // to support STEP decoding (create empty, then populate)
                 properties.append(Property(
                     name: propName,
-                    type: swiftType,
-                    defaultValue: "",
+                    type: "\(swiftType)?",
+                    defaultValue: " = nil",
                     isInherited: false
                 ))
             }
@@ -96,21 +98,14 @@ struct EntityGenerator {
             switch elem.kind {
             case .singleEntity(let typeName, let isOptional):
                 let swiftType = mapEntityType(typeName)
-                if isOptional {
-                    properties.append(Property(
-                        name: propName,
-                        type: "\(swiftType)?",
-                        defaultValue: " = nil",
-                        isInherited: false
-                    ))
-                } else {
-                    properties.append(Property(
-                        name: propName,
-                        type: swiftType,
-                        defaultValue: "",
-                        isInherited: false
-                    ))
-                }
+                // All entity refs are optional to support STEP decoding
+                let _ = isOptional  // Kept for reference; all are now optional
+                properties.append(Property(
+                    name: propName,
+                    type: "\(swiftType)?",
+                    defaultValue: " = nil",
+                    isInherited: false
+                ))
 
             case .collection(let elementType, let collectionType, _):
                 let swiftType = mapEntityType(elementType)
@@ -125,21 +120,14 @@ struct EntityGenerator {
                 ))
 
             case .selectRef(let groupName, let isOptional):
-                if isOptional {
-                    properties.append(Property(
-                        name: propName,
-                        type: "\(groupName)?",
-                        defaultValue: " = nil",
-                        isInherited: false
-                    ))
-                } else {
-                    properties.append(Property(
-                        name: propName,
-                        type: groupName,
-                        defaultValue: "",
-                        isInherited: false
-                    ))
-                }
+                // All SELECT refs are optional to support STEP decoding
+                let _ = isOptional  // Kept for reference; all are now optional
+                properties.append(Property(
+                    name: propName,
+                    type: "\(groupName)?",
+                    defaultValue: " = nil",
+                    isInherited: false
+                ))
             }
         }
 

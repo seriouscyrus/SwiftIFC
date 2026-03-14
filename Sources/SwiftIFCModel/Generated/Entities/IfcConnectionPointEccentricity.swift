@@ -9,7 +9,7 @@ extension IFC4X3 {
         public var eccentricityInZ: IfcLengthMeasure? = nil
 
         public init(
-            pointOnRelatingElement: IfcPointOrVertexPoint,
+            pointOnRelatingElement: IfcPointOrVertexPoint? = nil,
             pointOnRelatedElement: IfcPointOrVertexPoint? = nil,
             eccentricityInX: IfcLengthMeasure? = nil,
             eccentricityInY: IfcLengthMeasure? = nil,

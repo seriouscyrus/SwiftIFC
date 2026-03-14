@@ -5,11 +5,11 @@ import Foundation
 extension IFC4X3 {
     public class IfcIrregularTimeSeriesValue: Entity {
         public var timeStamp: IfcDateTime? = nil
-        public var listValues: IfcValue
+        public var listValues: IfcValue? = nil
 
         public init(
             timeStamp: IfcDateTime? = nil,
-            listValues: IfcValue
+            listValues: IfcValue? = nil
         ) {
             self.timeStamp = timeStamp
             self.listValues = listValues

@@ -6,7 +6,7 @@ extension IFC4X3 {
     public class IfcRelSpaceBoundary: IfcRelConnects, @unchecked Sendable {
         public var physicalOrVirtualBoundary: IfcPhysicalOrVirtualEnum? = nil
         public var internalOrExternalBoundary: IfcInternalOrExternalEnum? = nil
-        public var relatingSpace: IfcSpaceBoundarySelect
+        public var relatingSpace: IfcSpaceBoundarySelect? = nil
         public var relatedBuildingElement: IfcElement? = nil
         public var connectionGeometry: IfcConnectionGeometry? = nil
 
@@ -17,7 +17,7 @@ extension IFC4X3 {
             ownerHistory: IfcOwnerHistory? = nil,
             physicalOrVirtualBoundary: IfcPhysicalOrVirtualEnum? = nil,
             internalOrExternalBoundary: IfcInternalOrExternalEnum? = nil,
-            relatingSpace: IfcSpaceBoundarySelect,
+            relatingSpace: IfcSpaceBoundarySelect? = nil,
             relatedBuildingElement: IfcElement? = nil,
             connectionGeometry: IfcConnectionGeometry? = nil
         ) {

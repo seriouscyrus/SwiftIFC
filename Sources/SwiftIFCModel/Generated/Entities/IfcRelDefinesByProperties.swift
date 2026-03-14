@@ -4,14 +4,14 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcRelDefinesByProperties: IfcRelDefines, @unchecked Sendable {
-        public var relatingPropertyDefinition: IfcPropertySetDefinitionSelect
+        public var relatingPropertyDefinition: IfcPropertySetDefinitionSelect? = nil
 
         public init(
             globalId: IfcGloballyUniqueId? = nil,
             name: IfcLabel? = nil,
             description: IfcText? = nil,
             ownerHistory: IfcOwnerHistory? = nil,
-            relatingPropertyDefinition: IfcPropertySetDefinitionSelect
+            relatingPropertyDefinition: IfcPropertySetDefinitionSelect? = nil
         ) {
             self.relatingPropertyDefinition = relatingPropertyDefinition
             super.init(

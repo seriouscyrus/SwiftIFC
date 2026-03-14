@@ -4,10 +4,10 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcUnitAssignment: Entity {
-        public var units: IfcUnit
+        public var units: IfcUnit? = nil
 
         public init(
-            units: IfcUnit
+            units: IfcUnit? = nil
         ) {
             self.units = units
             super.init()

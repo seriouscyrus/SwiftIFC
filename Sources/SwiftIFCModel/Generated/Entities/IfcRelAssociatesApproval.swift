@@ -11,7 +11,7 @@ extension IFC4X3 {
             name: IfcLabel? = nil,
             description: IfcText? = nil,
             ownerHistory: IfcOwnerHistory? = nil,
-            relatedObjects: IfcDefinitionSelect,
+            relatedObjects: IfcDefinitionSelect? = nil,
             relatingApproval: IfcApproval? = nil
         ) {
             self.relatingApproval = relatingApproval

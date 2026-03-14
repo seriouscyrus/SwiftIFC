@@ -27,7 +27,12 @@ let package = Package(
         ),
         .testTarget(
             name: "SwiftIFCTests",
-            dependencies: ["SwiftIFC"]
+            dependencies: ["SwiftIFC"],
+            resources: [
+                .copy("Resources/IFC4/Ifc4_SampleHouse.ifc"),
+                .copy("Resources/IFC4X2/ifcbridge-model01.ifc"),
+                .copy("Resources/IFC4X3/KIT-Simple-Road-Test-Web-IFC4x3_RC2.ifc")
+            ]
         ),
     ]
 )

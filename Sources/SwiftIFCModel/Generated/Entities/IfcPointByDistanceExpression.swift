@@ -7,7 +7,7 @@ extension IFC4X3 {
         public var offsetLateral: IfcLengthMeasure? = nil
         public var offsetVertical: IfcLengthMeasure? = nil
         public var offsetLongitudinal: IfcLengthMeasure? = nil
-        public var distanceAlong: IfcCurveMeasureSelect
+        public var distanceAlong: IfcCurveMeasureSelect? = nil
         public var basisCurve: IfcCurve? = nil
 
         public init(
@@ -15,7 +15,7 @@ extension IFC4X3 {
             offsetLateral: IfcLengthMeasure? = nil,
             offsetVertical: IfcLengthMeasure? = nil,
             offsetLongitudinal: IfcLengthMeasure? = nil,
-            distanceAlong: IfcCurveMeasureSelect,
+            distanceAlong: IfcCurveMeasureSelect? = nil,
             basisCurve: IfcCurve? = nil
         ) {
             self.offsetLateral = offsetLateral

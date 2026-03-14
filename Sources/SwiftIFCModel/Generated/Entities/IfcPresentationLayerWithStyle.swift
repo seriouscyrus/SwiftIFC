@@ -13,7 +13,7 @@ extension IFC4X3 {
             name: IfcLabel? = nil,
             description: IfcText? = nil,
             identifier: IfcIdentifier? = nil,
-            assignedItems: IfcLayeredItem,
+            assignedItems: IfcLayeredItem? = nil,
             layerOn: IfcLogical? = nil,
             layerFrozen: IfcLogical? = nil,
             layerBlocked: IfcLogical? = nil,

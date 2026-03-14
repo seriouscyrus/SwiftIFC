@@ -4,7 +4,7 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcActor: IfcObject, @unchecked Sendable {
-        public var theActor: IfcActorSelect
+        public var theActor: IfcActorSelect? = nil
 
         public init(
             globalId: IfcGloballyUniqueId? = nil,
@@ -17,7 +17,7 @@ extension IFC4X3 {
             isDeclaredBy: IfcRelDefinesByObject? = nil,
             isTypedBy: IfcRelDefinesByType? = nil,
             isDefinedBy: [IfcRelDefinesByProperties] = [],
-            theActor: IfcActorSelect
+            theActor: IfcActorSelect? = nil
         ) {
             self.theActor = theActor
             super.init(

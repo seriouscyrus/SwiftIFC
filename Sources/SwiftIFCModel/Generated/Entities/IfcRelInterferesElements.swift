@@ -6,8 +6,8 @@ extension IFC4X3 {
     public class IfcRelInterferesElements: IfcRelConnects, @unchecked Sendable {
         public var interferenceType: IfcIdentifier? = nil
         public var impliedOrder: IfcLogical? = nil
-        public var relatingElement: IfcInterferenceSelect
-        public var relatedElement: IfcInterferenceSelect
+        public var relatingElement: IfcInterferenceSelect? = nil
+        public var relatedElement: IfcInterferenceSelect? = nil
         public var interferenceGeometry: IfcConnectionGeometry? = nil
         public var interferenceSpace: IfcSpatialZone? = nil
 
@@ -18,8 +18,8 @@ extension IFC4X3 {
             ownerHistory: IfcOwnerHistory? = nil,
             interferenceType: IfcIdentifier? = nil,
             impliedOrder: IfcLogical? = nil,
-            relatingElement: IfcInterferenceSelect,
-            relatedElement: IfcInterferenceSelect,
+            relatingElement: IfcInterferenceSelect? = nil,
+            relatedElement: IfcInterferenceSelect? = nil,
             interferenceGeometry: IfcConnectionGeometry? = nil,
             interferenceSpace: IfcSpatialZone? = nil
         ) {

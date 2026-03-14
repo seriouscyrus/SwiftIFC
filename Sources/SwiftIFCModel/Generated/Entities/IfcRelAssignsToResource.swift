@@ -4,7 +4,7 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcRelAssignsToResource: IfcRelAssigns, @unchecked Sendable {
-        public var relatingResource: IfcResourceSelect
+        public var relatingResource: IfcResourceSelect? = nil
 
         public init(
             globalId: IfcGloballyUniqueId? = nil,
@@ -13,7 +13,7 @@ extension IFC4X3 {
             ownerHistory: IfcOwnerHistory? = nil,
             relatedObjectsType: IfcStrippedOptional? = nil,
             relatedObjects: [IfcObjectDefinition] = [],
-            relatingResource: IfcResourceSelect
+            relatingResource: IfcResourceSelect? = nil
         ) {
             self.relatingResource = relatingResource
             super.init(

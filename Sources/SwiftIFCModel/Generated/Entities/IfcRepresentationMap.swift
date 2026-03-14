@@ -4,11 +4,11 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcRepresentationMap: Entity {
-        public var mappingOrigin: IfcAxis2Placement
+        public var mappingOrigin: IfcAxis2Placement? = nil
         public var mappedRepresentation: IfcRepresentation? = nil
 
         public init(
-            mappingOrigin: IfcAxis2Placement,
+            mappingOrigin: IfcAxis2Placement? = nil,
             mappedRepresentation: IfcRepresentation? = nil
         ) {
             self.mappingOrigin = mappingOrigin

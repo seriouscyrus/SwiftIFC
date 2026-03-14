@@ -4,13 +4,13 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcResourceApprovalRelationship: IfcResourceLevelRelationship, @unchecked Sendable {
-        public var relatedResourceObjects: IfcResourceObjectSelect
+        public var relatedResourceObjects: IfcResourceObjectSelect? = nil
         public var relatingApproval: IfcApproval? = nil
 
         public init(
             name: IfcLabel? = nil,
             description: IfcText? = nil,
-            relatedResourceObjects: IfcResourceObjectSelect,
+            relatedResourceObjects: IfcResourceObjectSelect? = nil,
             relatingApproval: IfcApproval? = nil
         ) {
             self.relatedResourceObjects = relatedResourceObjects

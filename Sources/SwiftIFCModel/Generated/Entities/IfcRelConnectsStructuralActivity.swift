@@ -4,7 +4,7 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcRelConnectsStructuralActivity: IfcRelConnects, @unchecked Sendable {
-        public var relatingElement: IfcStructuralActivityAssignmentSelect
+        public var relatingElement: IfcStructuralActivityAssignmentSelect? = nil
         public var relatedStructuralActivity: IfcStructuralActivity? = nil
 
         public init(
@@ -12,7 +12,7 @@ extension IFC4X3 {
             name: IfcLabel? = nil,
             description: IfcText? = nil,
             ownerHistory: IfcOwnerHistory? = nil,
-            relatingElement: IfcStructuralActivityAssignmentSelect,
+            relatingElement: IfcStructuralActivityAssignmentSelect? = nil,
             relatedStructuralActivity: IfcStructuralActivity? = nil
         ) {
             self.relatingElement = relatingElement

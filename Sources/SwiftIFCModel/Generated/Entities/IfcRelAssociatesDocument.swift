@@ -4,15 +4,15 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcRelAssociatesDocument: IfcRelAssociates, @unchecked Sendable {
-        public var relatingDocument: IfcDocumentSelect
+        public var relatingDocument: IfcDocumentSelect? = nil
 
         public init(
             globalId: IfcGloballyUniqueId? = nil,
             name: IfcLabel? = nil,
             description: IfcText? = nil,
             ownerHistory: IfcOwnerHistory? = nil,
-            relatedObjects: IfcDefinitionSelect,
-            relatingDocument: IfcDocumentSelect
+            relatedObjects: IfcDefinitionSelect? = nil,
+            relatingDocument: IfcDocumentSelect? = nil
         ) {
             self.relatingDocument = relatingDocument
             super.init(

@@ -5,14 +5,14 @@ import Foundation
 extension IFC4X3 {
     public class IfcLagTime: IfcSchedulingTime, @unchecked Sendable {
         public var durationType: IfcTaskDurationEnum? = nil
-        public var lagValue: IfcTimeOrRatioSelect
+        public var lagValue: IfcTimeOrRatioSelect? = nil
 
         public init(
             name: IfcLabel? = nil,
             dataOrigin: IfcDataOriginEnum? = nil,
             userDefinedDataOrigin: IfcLabel? = nil,
             durationType: IfcTaskDurationEnum? = nil,
-            lagValue: IfcTimeOrRatioSelect
+            lagValue: IfcTimeOrRatioSelect? = nil
         ) {
             self.durationType = durationType
             self.lagValue = lagValue
