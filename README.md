@@ -1,9 +1,3 @@
-//
-//  README.md
-//  SwiftIFC
-//
-//  Created by George Brown on 17.03.2026.
-//
 # SwiftIFC
 
 This swift package contains a code generation tool and output for the IFC standard IFC 4.2 generated from the XSD schema available [here](https://technical.buildingsmart.org/standards/ifc/ifc-schema-specifications/) .
