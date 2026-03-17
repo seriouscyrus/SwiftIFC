@@ -20,7 +20,7 @@ struct SwiftCodeGenerator {
         try fm.createDirectory(atPath: entitiesDir, withIntermediateDirectories: true)
 
         // 1. Entity base
-        let entityGen = EntityGenerator(schema: schema)
+        let entityGen = EntityGenerator(schema: schema, expressSchema: expressSchema)
         let entityBase = entityGen.generateEntityBase()
         try write(entityBase, to: "IFCEntityBase.swift")
         print("  Generated IFCEntityBase.swift")

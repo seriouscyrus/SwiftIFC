@@ -4,5 +4,18 @@ import Foundation
 
 extension IFC4X3 {
     public class IfcIndexedPolygonalFaceWithVoids: IfcIndexedPolygonalFace, @unchecked Sendable {
+        public var innerCoordIndices: [IfcPositiveInteger] = []
+
+        public init(
+            styledByItem: IfcStyledItem? = nil,
+            coordIndex: [IfcPositiveInteger] = [],
+            innerCoordIndices: [IfcPositiveInteger] = []
+        ) {
+            self.innerCoordIndices = innerCoordIndices
+            super.init(
+                styledByItem: styledByItem,
+                coordIndex: coordIndex
+            )
+        }
     }
 }

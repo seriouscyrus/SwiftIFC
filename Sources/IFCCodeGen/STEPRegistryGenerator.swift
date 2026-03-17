@@ -12,10 +12,10 @@ struct STEPRegistryGenerator {
         let sortedTypes = schema.complexTypes.keys.sorted()
         var entries: [String] = []
         for typeName in sortedTypes {
-            guard let ct = schema.complexTypes[typeName] else { continue }
+            guard schema.complexTypes[typeName] != nil else { continue }
             guard !infrastructureTypes.contains(typeName) else { continue }
-            // Skip abstract types — they can't be instantiated
-            if ct.isAbstract { continue }
+            // Note: abstract types are included because real-world IFC files
+            // (especially older schema versions) may contain them directly
             let stepName = typeName.uppercased()
             entries.append("        \"\(stepName)\": { \(typeName)() }")
         }

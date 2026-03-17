@@ -360,10 +360,106 @@ import Testing
     #expect(decoded?.prefix == .milli)
 }
 
-@Test func sampleFileDecodeEncode() throws {
+@Test func analyseSampleFile() throws {
     let url = try #require(Bundle.module.url(forResource: "KIT-Simple-Road-Test-Web-IFC4x3_RC2", withExtension: "ifc"))
     let file1 = try STEPDecoder().decode(contentsOf: url)
-    for (key, entity) in file1.entities.enumerated() {
-        print("\(key): \(entity)")
+    let ifcRoad = try #require(file1.entities[30] as? IFC4X3.IfcRoad)
+    let localPlacementModel = try #require(ifcRoad.objectPlacement as? IFC4X3.IfcLocalPlacement)
+    let localPlacementFile = try #require(file1.entities[31] as? IFC4X3.IfcLocalPlacement)
+    let relativePlacementFile = try #require(localPlacementFile.relativePlacement)
+    let relativePlacementModel = try #require(localPlacementModel.relativePlacement)
+    switch relativePlacementFile {
+    case .axis2Placement2D(let placementFile):
+        let pointFile = try #require(placementFile.location as? IFC4X3.IfcCartesianPoint)
+        guard case .axis2Placement2D(let placementModel) = relativePlacementModel else {
+            Issue.record("Mismatch enum case")
+            return
+        }
+        let pointModel = try #require(placementModel.location as? IFC4X3.IfcCartesianPoint)
+        #expect(pointFile.coordinates.count == 2)
+        #expect(pointModel.coordinates.count == 2)
+        
+    case .axis2Placement3D(let placementFile):
+        let pointFile = try #require(placementFile.location as? IFC4X3.IfcCartesianPoint)
+        guard case .axis2Placement3D(let placementModel) = relativePlacementModel else {
+            Issue.record("Mismatch enum case")
+            return
+        }
+        let pointModel = try #require(placementModel.location as? IFC4X3.IfcCartesianPoint)
+        #expect(pointFile.coordinates.count == 3)
+        #expect(pointModel.coordinates.count == 3)
     }
+
+    print("IfcRoad = \(ifcRoad)")
+    print("IfcRoad.objectPlacement = \(String(describing: ifcRoad.objectPlacement))")
+    print("IfcRoad.isNestedBy = \(String(describing: ifcRoad.isNestedBy))")
+    print("IfcRoad.isDecomposedBy = \(String(describing: ifcRoad.isDecomposedBy))")
+    print("IfcRoad.isDefinedBy = \(String(describing: ifcRoad.isDefinedBy))")
+    print("IfcRoad.containsElements = \(String(describing: ifcRoad.containsElements))")
+    print("IfcRoad.referencesElements = \(String(describing: ifcRoad.referencesElements))")
+    print("IfcRoad.predefinedType = \(String(describing: ifcRoad.predefinedType))")
+
+    for ifcRelAggregrate in ifcRoad.isDecomposedBy {
+        let relatingObject = try #require(ifcRelAggregrate.relatingObject as? IFC4X3.IfcRoad)
+        #expect(relatingObject.globalId == ifcRoad.globalId)
+        print("Relating object = \(String(describing: ifcRelAggregrate.relatingObject))")
+        for relatedObjects in ifcRelAggregrate.relatedObjects {
+            let ifcFacilityPart = try #require(relatedObjects as? IFC4X3.IfcFacilityPart)
+            let localPlacement = try #require(ifcFacilityPart.objectPlacement as? IFC4X3.IfcLocalPlacement)
+            let relativePlacement = try #require(localPlacement.relativePlacement)
+            
+            print("ifcFacilityPart = \(ifcFacilityPart)")
+            print("ifcFacilityPart.isNestedBy = \(String(describing:ifcFacilityPart.isNestedBy))")
+            print("ifcFacilityPart.isDecomposedBy = \(String(describing:ifcFacilityPart.isDecomposedBy))")
+            print("ifcFacilityPart.isDefinedBy = \(String(describing:ifcFacilityPart.isDefinedBy))")
+            print("ifcFacilityPart.containsElements = \(String(describing:ifcFacilityPart.containsElements))")
+            print("ifcFacilityPart.referencesElements = \(String(describing:ifcFacilityPart.referencesElements))")
+
+
+        }
+    }
+//    for rootEntity in file1.rootEntities {
+//        print("rootEntity = \(rootEntity)")
+//    }
+    
+//    globalId: IfcGloballyUniqueId? = nil,
+//    name: IfcLabel? = nil,
+//    description: IfcText? = nil,
+//    ownerHistory: IfcOwnerHistory? = nil,
+//    isNestedBy: [IfcRelNests] = [],
+//    isDecomposedBy: [IfcRelAggregates] = [],
+//    objectType: IfcLabel? = nil,
+//    isDeclaredBy: IfcRelDefinesByObject? = nil,
+//    isTypedBy: IfcRelDefinesByType? = nil,
+//    isDefinedBy: [IfcRelDefinesByProperties] = [],
+//    objectPlacement: IfcObjectPlacement? = nil,
+//    representation: IfcProductRepresentation? = nil,
+//    longName: IfcLabel? = nil,
+//    containsElements: [IfcRelContainedInSpatialStructure] = [],
+//    referencesElements: [IfcRelReferencedInSpatialStructure] = [],
+//    compositionType: IfcElementCompositionEnum? = nil,
+//    predefinedType: IfcRoadTypeEnum? = nil
+}
+
+@Test func sampleFileEncodeDecode() throws {
+    let url = try #require(Bundle.module.url(forResource: "KIT-Simple-Road-Test-Web-IFC4x3_RC2", withExtension: "ifc"))
+    let file1 = try STEPDecoder().decode(contentsOf: url)
+    let project1 = try #require(file1.project)
+
+    // Encode from the decoded project (first round-trip)
+    let encoded1 = try STEPEncoder().encode(entities: [project1])
+    let file2 = try STEPDecoder().decode(encoded1)
+
+    // Re-encode from the round-tripped project (second round-trip)
+    let project2 = try #require(file2.project)
+    let encoded2 = try STEPEncoder().encode(entities: [project2])
+    let file3 = try STEPDecoder().decode(encoded2)
+
+    // The encoder/decoder pair should be idempotent: second round-trip
+    // must produce the same entity count as the first.
+    #expect(file2.entities.count == file3.entities.count)
+
+    // Verify the project hierarchy survived the round-trip
+    #expect(project2.name == project1.name)
+    #expect(project2.isDecomposedBy.count == project1.isDecomposedBy.count)
 }

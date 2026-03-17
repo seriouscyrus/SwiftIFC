@@ -7,6 +7,7 @@ extension IFC4X3 {
         public var targetScale: IfcPositiveRatioMeasure? = nil
         public var targetView: IfcGeometricProjectionEnum? = nil
         public var userDefinedTargetView: IfcLabel? = nil
+        public var parentContext: IfcGeometricRepresentationContext? = nil
 
         public init(
             contextIdentifier: IfcLabel? = nil,
@@ -19,11 +20,13 @@ extension IFC4X3 {
             hasCoordinateOperation: IfcCoordinateOperation? = nil,
             targetScale: IfcPositiveRatioMeasure? = nil,
             targetView: IfcGeometricProjectionEnum? = nil,
-            userDefinedTargetView: IfcLabel? = nil
+            userDefinedTargetView: IfcLabel? = nil,
+            parentContext: IfcGeometricRepresentationContext? = nil
         ) {
             self.targetScale = targetScale
             self.targetView = targetView
             self.userDefinedTargetView = userDefinedTargetView
+            self.parentContext = parentContext
             super.init(
                 contextIdentifier: contextIdentifier,
                 contextType: contextType,

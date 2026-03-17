@@ -134,9 +134,19 @@ struct STEPMetadataGenerator {
             let swiftName = swiftPropertyName(expressAttr.name)
             if let xsdProp = xsdLookup[swiftName.lowercased()] ?? xsdLookup[expressAttr.name.lowercased()] {
                 result.append(xsdProp)
+            } else {
+                // EXPRESS attribute has no XSD counterpart (e.g. RelatingObject
+                // on IfcRelAggregates). Synthesize a STEPAttribute from EXPRESS.
+                let kind = synthesizeAttributeKind(expressAttr)
+                result.append(STEPAttribute(
+                    swiftName: swiftName,
+                    swiftType: expressAttr.typeName,
+                    kind: kind,
+                    isOptional: expressAttr.isOptional,
+                    isCollection: expressAttr.isCollection,
+                    expressName: expressAttr.name
+                ))
             }
-            // If EXPRESS attribute has no XSD counterpart, skip it —
-            // the XSD is the source of truth for the Swift model
         }
 
         return result
@@ -226,6 +236,15 @@ struct STEPMetadataGenerator {
             if resolved.hasPrefix("[") { return "list" }
             return "string"
         }
+    }
+
+    /// Determines the STEP attribute kind for an EXPRESS attribute that has no
+    /// XSD counterpart (e.g. RelatingObject, RelatingStructure).
+    private func synthesizeAttributeKind(_ expressAttr: EXPRESSAttribute) -> String {
+        if expressAttr.isCollection {
+            return "list"
+        }
+        return classifyAttributeKind(expressAttr.typeName, isCollection: false)
     }
 
     private func guessAttributeKind(_ expressType: String) -> String {

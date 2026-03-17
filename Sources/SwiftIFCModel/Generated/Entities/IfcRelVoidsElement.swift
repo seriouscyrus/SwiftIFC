@@ -5,15 +5,18 @@ import Foundation
 extension IFC4X3 {
     public class IfcRelVoidsElement: IfcRelDecomposes, @unchecked Sendable {
         public var relatedOpeningElement: IfcFeatureElementSubtraction? = nil
+        public var relatingBuildingElement: IfcElement? = nil
 
         public init(
             globalId: IfcGloballyUniqueId? = nil,
             name: IfcLabel? = nil,
             description: IfcText? = nil,
             ownerHistory: IfcOwnerHistory? = nil,
-            relatedOpeningElement: IfcFeatureElementSubtraction? = nil
+            relatedOpeningElement: IfcFeatureElementSubtraction? = nil,
+            relatingBuildingElement: IfcElement? = nil
         ) {
             self.relatedOpeningElement = relatedOpeningElement
+            self.relatingBuildingElement = relatingBuildingElement
             super.init(
                 globalId: globalId,
                 name: name,

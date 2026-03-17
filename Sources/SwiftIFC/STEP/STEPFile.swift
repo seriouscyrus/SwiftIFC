@@ -127,11 +127,33 @@ public struct STEPFile: Sendable {
     /// The entity instances in the DATA section, keyed by STEP entity ID.
     public var entities: [Int: IFC4X3.Entity]
 
+    /// Entity type names that were encountered during decoding but not
+    /// recognized by the current schema (e.g. deprecated types from
+    /// older IFC versions). These entities were skipped.
+    public var skippedEntityTypes: Set<String>
+
+    /// The single `IfcProject` instance that serves as the root of the
+    /// spatial and object hierarchy. Every well-formed IFC file contains
+    /// exactly one project. Returns `nil` if none is found.
+    ///
+    /// Navigate the hierarchy from here using inverse attributes:
+    /// ```
+    /// project.isDecomposedBy     → [IfcRelAggregates]
+    ///   .relatedObjects          → [IfcSite, ...]
+    ///     site.isDecomposedBy    → [IfcRelAggregates]
+    ///       .relatedObjects      → [IfcBuilding, IfcRoad, ...]
+    /// ```
+    public var project: IFC4X3.IfcProject? {
+        entities.values.first(where: { $0 is IFC4X3.IfcProject }) as? IFC4X3.IfcProject
+    }
+
     public init(
         header: STEPHeader = .default,
-        entities: [Int: IFC4X3.Entity] = [:]
+        entities: [Int: IFC4X3.Entity] = [:],
+        skippedEntityTypes: Set<String> = []
     ) {
         self.header = header
         self.entities = entities
+        self.skippedEntityTypes = skippedEntityTypes
     }
 }

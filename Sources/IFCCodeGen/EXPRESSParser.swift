@@ -275,6 +275,7 @@ struct EXPRESSParser {
         // "LIST [1:?] OF IfcProperty" -> "IfcProperty"
         // "SET [0:?] OF IfcRelAssigns FOR ..." -> "IfcRelAssigns"
         // "ARRAY [0:UUpper] OF ARRAY [0:VUpper] OF IfcCartesianPoint" -> "IfcCartesianPoint"
+        // "LIST [1:?] OF LIST [3:?] OF UNIQUE IfcPositiveInteger" -> "IfcPositiveInteger"
         guard let ofRange = typeStr.range(of: " OF ", options: .backwards) else {
             return typeStr
         }
@@ -284,8 +285,11 @@ struct EXPRESSParser {
         if let forRange = after.range(of: " FOR ") {
             after = String(after[after.startIndex..<forRange.lowerBound])
         }
-        // Take just the type name
-        let result = after.components(separatedBy: CharacterSet.whitespaces).first ?? after
+        // Strip EXPRESS constraint qualifiers (UNIQUE, etc.)
+        let qualifiers: Set<String> = ["UNIQUE"]
+        let words = after.components(separatedBy: CharacterSet.whitespaces)
+        // Take the last word that is not a qualifier
+        let result = words.last { !qualifiers.contains($0) } ?? after
         return result.trimmingCharacters(in: CharacterSet(charactersIn: ";"))
     }
 

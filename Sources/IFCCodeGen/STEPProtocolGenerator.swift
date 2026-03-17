@@ -27,8 +27,11 @@ struct STEPProtocolGenerator {
             }
 
             public var stringValue: String? {
-                if case .string(let v) = self { return v }
-                return nil
+                switch self {
+                case .string(let v): return v
+                case .enumeration(let v): return v
+                default: return nil
+                }
             }
 
             public var integerValue: Int? {

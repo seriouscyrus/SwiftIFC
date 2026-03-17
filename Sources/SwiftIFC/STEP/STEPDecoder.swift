@@ -81,10 +81,14 @@ public struct STEPDecoder {
         var entities: [Int: IFC4X3.Entity] = [:]
         entities.reserveCapacity(parsed.entities.count)
 
+        var skippedTypes = Set<String>()
         for (id, raw) in parsed.entities {
             let upperName = raw.typeName.uppercased()
             guard let factory = IFC4X3.stepEntityRegistry[upperName] else {
-                throw STEPDecodeError.unknownEntityType(raw.typeName)
+                // Skip entities from deprecated/older schema versions that
+                // aren't in the current IFC4X3 ADD2 schema.
+                skippedTypes.insert(raw.typeName)
+                continue
             }
             entities[id] = factory()
         }
@@ -130,7 +134,13 @@ public struct STEPDecoder {
             }
         }
 
-        return STEPFile(header: parsed.header, entities: entities)
+        // 2c. Resolve inverse attributes on target entities.
+        //     Walk all relationship entities and populate the inverse
+        //     collection / optional properties on the entities they reference.
+        resolveInverseAttributes(entities)
+
+        return STEPFile(header: parsed.header, entities: entities,
+                        skippedEntityTypes: skippedTypes)
     }
 
     // MARK: - Descriptor Chain
@@ -289,4 +299,85 @@ public struct STEPDecoder {
             return .select(typeName: typeName.uppercased(), value: inner)
         }
     }
+
+    // MARK: - Inverse Attribute Resolution
+
+    /// Iterates through all relationship entities and populates inverse
+    /// properties on the entities they reference.
+    ///
+    /// For example, an `IfcRelAggregates` whose `relatingObject` points to an
+    /// `IfcRoad` will cause that road's `isDecomposedBy` array to include the
+    /// `IfcRelAggregates` instance.
+    private func resolveInverseAttributes(_ entities: [Int: IFC4X3.Entity]) {
+        for (_, entity) in entities {
+            // IfcRelAggregates.relatingObject → target.isDecomposedBy
+            if let rel = entity as? IFC4X3.IfcRelAggregates,
+               let target = rel.relatingObject {
+                target.isDecomposedBy.append(rel)
+            }
+
+            // IfcRelNests.relatingObject → target.isNestedBy
+            if let rel = entity as? IFC4X3.IfcRelNests,
+               let target = rel.relatingObject {
+                target.isNestedBy.append(rel)
+            }
+
+            // IfcRelContainedInSpatialStructure.relatingStructure → target.containsElements
+            if let rel = entity as? IFC4X3.IfcRelContainedInSpatialStructure,
+               let target = rel.relatingStructure {
+                target.containsElements.append(rel)
+            }
+
+            // IfcRelReferencedInSpatialStructure.relatingStructure → target.referencesElements
+            if let rel = entity as? IFC4X3.IfcRelReferencedInSpatialStructure,
+               let target = rel.relatingStructure {
+                target.referencesElements.append(rel)
+            }
+
+            // IfcRelDeclares.relatingContext → target.declares
+            if let rel = entity as? IFC4X3.IfcRelDeclares,
+               let target = rel.relatingContext {
+                target.declares.append(rel)
+            }
+
+            // IfcRelDefinesByObject.relatingObject → target.isDeclaredBy (SET [0:1])
+            if let rel = entity as? IFC4X3.IfcRelDefinesByObject,
+               let target = rel.relatingObject {
+                target.isDeclaredBy = rel
+            }
+
+            // IfcRelDefinesByType.relatedObjects → each target.isTypedBy (SET [0:1])
+            if let rel = entity as? IFC4X3.IfcRelDefinesByType {
+                for target in rel.relatedObjects {
+                    target.isTypedBy = rel
+                }
+            }
+
+            // IfcRelDefinesByProperties.relatedObjects → each target.isDefinedBy
+            if let rel = entity as? IFC4X3.IfcRelDefinesByProperties {
+                for obj in rel.relatedObjects {
+                    if let target = obj as? IFC4X3.IfcObject {
+                        target.isDefinedBy.append(rel)
+                    } else if let target = obj as? IFC4X3.IfcContext {
+                        // IfcContext also has isDefinedBy
+                        target.isDefinedBy.append(rel)
+                    }
+                }
+            }
+
+            // IfcRelProjectsElement.relatingElement → target.hasProjections
+            if let rel = entity as? IFC4X3.IfcRelProjectsElement,
+               let target = rel.relatingElement {
+                target.hasProjections = rel
+            }
+
+            // IfcRelVoidsElement.relatingBuildingElement → target.hasOpenings
+            if let rel = entity as? IFC4X3.IfcRelVoidsElement,
+               let target = rel.relatingBuildingElement {
+                target.hasOpenings = rel
+            }
+        }
+    }
+
+
 }

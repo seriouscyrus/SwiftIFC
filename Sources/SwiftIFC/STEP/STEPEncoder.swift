@@ -127,7 +127,8 @@ public struct STEPEncoder {
     // MARK: - Entity Graph Walking
 
     /// Recursively walks the entity graph starting from the given entity,
-    /// collecting all unique entities reachable through attribute references.
+    /// collecting all unique entities reachable through attribute references
+    /// and inverse attributes (relationship entities).
     private func collectEntities(
         _ entity: IFC4X3.Entity,
         visited: inout Set<ObjectIdentifier>,
@@ -138,7 +139,7 @@ public struct STEPEncoder {
         visited.insert(oid)
         result.append(entity)
 
-        // Walk all attributes to find referenced entities.
+        // Walk all forward STEP attributes to find referenced entities.
         let chain = descriptorChain(for: entity)
 
         for (descriptor, _) in chain {
@@ -147,6 +148,11 @@ public struct STEPEncoder {
                 collectEntitiesFromValue(value, visited: &visited, result: &result)
             }
         }
+
+        // Walk inverse attributes to collect relationship entities that
+        // are not part of the STEP descriptor chain but are reachable
+        // through the decoded object graph.
+        collectInverseEntities(entity, visited: &visited, result: &result)
     }
 
     /// Recursively inspects a `STEPValue` for entity references and collects them.
@@ -166,6 +172,68 @@ public struct STEPEncoder {
             collectEntitiesFromValue(innerValue, visited: &visited, result: &result)
         default:
             break
+        }
+    }
+
+    /// Walks inverse attribute properties on the entity to discover
+    /// relationship entities that wouldn't be found through forward
+    /// STEP attributes alone.
+    private func collectInverseEntities(
+        _ entity: IFC4X3.Entity,
+        visited: inout Set<ObjectIdentifier>,
+        result: inout [IFC4X3.Entity]
+    ) {
+        // IfcObjectDefinition inverse attributes
+        if let objDef = entity as? IFC4X3.IfcObjectDefinition {
+            for rel in objDef.isDecomposedBy {
+                collectEntities(rel, visited: &visited, result: &result)
+            }
+            for rel in objDef.isNestedBy {
+                collectEntities(rel, visited: &visited, result: &result)
+            }
+        }
+
+        // IfcObject inverse attributes
+        if let obj = entity as? IFC4X3.IfcObject {
+            if let rel = obj.isDeclaredBy {
+                collectEntities(rel, visited: &visited, result: &result)
+            }
+            if let rel = obj.isTypedBy {
+                collectEntities(rel, visited: &visited, result: &result)
+            }
+            for rel in obj.isDefinedBy {
+                collectEntities(rel, visited: &visited, result: &result)
+            }
+        }
+
+        // IfcContext inverse attributes
+        if let ctx = entity as? IFC4X3.IfcContext {
+            for rel in ctx.declares {
+                collectEntities(rel, visited: &visited, result: &result)
+            }
+            for rel in ctx.isDefinedBy {
+                collectEntities(rel, visited: &visited, result: &result)
+            }
+        }
+
+        // IfcSpatialElement inverse attributes
+        if let spatial = entity as? IFC4X3.IfcSpatialElement {
+            for rel in spatial.containsElements {
+                collectEntities(rel, visited: &visited, result: &result)
+            }
+            for rel in spatial.referencesElements {
+                collectEntities(rel, visited: &visited, result: &result)
+            }
+        }
+
+        // IfcElement inverse attributes
+        if let element = entity as? IFC4X3.IfcElement {
+            if let rel = element.hasProjections {
+                collectEntities(rel, visited: &visited, result: &result)
+            }
+            if let rel = element.hasOpenings {
+                collectEntities(rel, visited: &visited, result: &result)
+            }
         }
     }
 

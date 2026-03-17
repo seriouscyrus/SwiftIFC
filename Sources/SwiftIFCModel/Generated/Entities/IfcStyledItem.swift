@@ -6,14 +6,17 @@ extension IFC4X3 {
     public class IfcStyledItem: IfcRepresentationItem, @unchecked Sendable {
         public var name: IfcLabel? = nil
         public var styles: [IfcPresentationStyle] = []
+        public var item: IfcRepresentationItem? = nil
 
         public init(
             styledByItem: IfcStyledItem? = nil,
             name: IfcLabel? = nil,
-            styles: [IfcPresentationStyle] = []
+            styles: [IfcPresentationStyle] = [],
+            item: IfcRepresentationItem? = nil
         ) {
             self.name = name
             self.styles = styles
+            self.item = item
             super.init(
                 styledByItem: styledByItem
             )

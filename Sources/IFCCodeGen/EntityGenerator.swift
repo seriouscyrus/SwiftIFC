@@ -2,6 +2,7 @@ import Foundation
 
 struct EntityGenerator {
     let schema: IFCSchema
+    let expressSchema: EXPRESSSchema?
 
     // MARK: - Generate base Entity class file
 
@@ -131,7 +132,60 @@ struct EntityGenerator {
             }
         }
 
+        // Add EXPRESS-only attributes not present in XSD.
+        // The XSD omits some direct EXPRESS attributes (e.g. RelatingObject on
+        // IfcRelAggregates) by modelling them as inverse relationships on target
+        // entities. These must still appear as Swift properties for STEP decoding.
+        if let express = expressSchema?.entities[ct.name] {
+            let existingNames = Set(properties.map { $0.name })
+            for expressAttr in express.directAttributes {
+                if express.ownDerivedAttributeNames.contains(expressAttr.name) {
+                    continue
+                }
+                let propName = swiftPropertyName(expressAttr.name)
+                guard !existingNames.contains(propName) else { continue }
+
+                let swiftType = resolveExpressType(expressAttr)
+                if expressAttr.isCollection {
+                    properties.append(Property(
+                        name: propName,
+                        type: "[\(swiftType)]",
+                        defaultValue: " = []",
+                        isInherited: false
+                    ))
+                } else {
+                    properties.append(Property(
+                        name: propName,
+                        type: "\(swiftType)?",
+                        defaultValue: " = nil",
+                        isInherited: false
+                    ))
+                }
+            }
+        }
+
         return properties
+    }
+
+    /// Maps an EXPRESS attribute type name to a Swift type name.
+    private func resolveExpressType(_ attr: EXPRESSAttribute) -> String {
+        let typeName = attr.typeName
+        // Check if it's a known XSD complex type (entity class)
+        if schema.complexTypes[typeName] != nil { return typeName }
+        // Check if it's a known simple type (enum or alias)
+        if schema.simpleTypes[typeName] != nil { return typeName }
+        // Check if it's a known group (SELECT type)
+        if schema.groups[typeName] != nil { return typeName }
+        // Resolve common EXPRESS primitive types
+        switch typeName {
+        case "REAL", "NUMBER": return "Double"
+        case "INTEGER": return "Int"
+        case "STRING": return "String"
+        case "BOOLEAN": return "Bool"
+        case "LOGICAL": return "Bool"
+        case "BINARY": return "Data"
+        default: return typeName
+        }
     }
 
     private func mapAttributeType(_ typeName: String) -> String {

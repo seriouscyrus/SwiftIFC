@@ -7,6 +7,7 @@ extension IFC4X3 {
         public var description: IfcText? = nil
         public var sort: IfcIdentifier? = nil
         public var hasReferences: [IfcClassificationReference] = []
+        public var referencedSource: IfcClassificationReferenceSelect? = nil
 
         public init(
             location: IfcURIReference? = nil,
@@ -14,11 +15,13 @@ extension IFC4X3 {
             name: IfcLabel? = nil,
             description: IfcText? = nil,
             sort: IfcIdentifier? = nil,
-            hasReferences: [IfcClassificationReference] = []
+            hasReferences: [IfcClassificationReference] = [],
+            referencedSource: IfcClassificationReferenceSelect? = nil
         ) {
             self.description = description
             self.sort = sort
             self.hasReferences = hasReferences
+            self.referencedSource = referencedSource
             super.init(
                 location: location,
                 identification: identification,

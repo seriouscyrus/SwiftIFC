@@ -9,12 +9,14 @@ extension IFC4X3 {
         public init(
             maps: [IfcSurfaceTexture] = [],
             texCoords: IfcTextureVertexList? = nil,
+            mappedTo: IfcTessellatedFaceSet? = nil,
             texCoordIndex: [IfcPositiveInteger] = []
         ) {
             self.texCoordIndex = texCoordIndex
             super.init(
                 maps: maps,
-                texCoords: texCoords
+                texCoords: texCoords,
+                mappedTo: mappedTo
             )
         }
     }

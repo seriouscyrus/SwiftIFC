@@ -5,15 +5,18 @@ import Foundation
 extension IFC4X3 {
     public class IfcRelDeclares: IfcRelationship, @unchecked Sendable {
         public var relatedDefinitions: IfcDefinitionSelect? = nil
+        public var relatingContext: IfcContext? = nil
 
         public init(
             globalId: IfcGloballyUniqueId? = nil,
             name: IfcLabel? = nil,
             description: IfcText? = nil,
             ownerHistory: IfcOwnerHistory? = nil,
-            relatedDefinitions: IfcDefinitionSelect? = nil
+            relatedDefinitions: IfcDefinitionSelect? = nil,
+            relatingContext: IfcContext? = nil
         ) {
             self.relatedDefinitions = relatedDefinitions
+            self.relatingContext = relatingContext
             super.init(
                 globalId: globalId,
                 name: name,

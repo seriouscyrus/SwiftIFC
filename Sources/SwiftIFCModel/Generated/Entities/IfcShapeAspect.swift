@@ -8,17 +8,20 @@ extension IFC4X3 {
         public var description: IfcText? = nil
         public var productDefinitional: IfcLogical? = nil
         public var shapeRepresentations: [IfcShapeModel] = []
+        public var partOfProductDefinitionShape: IfcProductRepresentationSelect? = nil
 
         public init(
             name: IfcLabel? = nil,
             description: IfcText? = nil,
             productDefinitional: IfcLogical? = nil,
-            shapeRepresentations: [IfcShapeModel] = []
+            shapeRepresentations: [IfcShapeModel] = [],
+            partOfProductDefinitionShape: IfcProductRepresentationSelect? = nil
         ) {
             self.name = name
             self.description = description
             self.productDefinitional = productDefinitional
             self.shapeRepresentations = shapeRepresentations
+            self.partOfProductDefinitionShape = partOfProductDefinitionShape
             super.init()
         }
     }

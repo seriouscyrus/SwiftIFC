@@ -5,15 +5,18 @@ import Foundation
 extension IFC4X3 {
     public class IfcRelDefinesByType: IfcRelDefines, @unchecked Sendable {
         public var relatingType: IfcTypeObject? = nil
+        public var relatedObjects: [IfcObject] = []
 
         public init(
             globalId: IfcGloballyUniqueId? = nil,
             name: IfcLabel? = nil,
             description: IfcText? = nil,
             ownerHistory: IfcOwnerHistory? = nil,
-            relatingType: IfcTypeObject? = nil
+            relatingType: IfcTypeObject? = nil,
+            relatedObjects: [IfcObject] = []
         ) {
             self.relatingType = relatingType
+            self.relatedObjects = relatedObjects
             super.init(
                 globalId: globalId,
                 name: name,

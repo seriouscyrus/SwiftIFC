@@ -10,6 +10,7 @@ extension IFC4X3 {
 
         public init(
             targetCRS: IfcCoordinateReferenceSystem? = nil,
+            sourceCRS: IfcCoordinateReferenceSystemSelect? = nil,
             height: IfcLengthMeasure? = nil,
             firstCoordinate: IfcMeasureValue? = nil,
             secondCoordinate: IfcMeasureValue? = nil
@@ -18,7 +19,8 @@ extension IFC4X3 {
             self.firstCoordinate = firstCoordinate
             self.secondCoordinate = secondCoordinate
             super.init(
-                targetCRS: targetCRS
+                targetCRS: targetCRS,
+                sourceCRS: sourceCRS
             )
         }
     }

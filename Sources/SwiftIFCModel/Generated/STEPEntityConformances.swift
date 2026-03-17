@@ -2437,21 +2437,23 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcClassificationReference.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCCLASSIFICATIONREFERENCE",
-            ownAttributes: [STEPAttributeDescriptor(name: "description", kind: .string, isOptional: true), STEPAttributeDescriptor(name: "sort", kind: .string, isOptional: true)],
+            ownAttributes: [STEPAttributeDescriptor(name: "referencedSource", kind: .select, isOptional: true), STEPAttributeDescriptor(name: "description", kind: .string, isOptional: true), STEPAttributeDescriptor(name: "sort", kind: .string, isOptional: true)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcClassificationReference else { return .null }
                 switch index {
-                case 0: return e.description.map { .string($0) } ?? .null
-                case 1: return e.sort.map { .string($0) } ?? .null
+                case 0: return e.referencedSource.map { $0.stepEncode() } ?? .null
+                case 1: return e.description.map { .string($0) } ?? .null
+                case 2: return e.sort.map { .string($0) } ?? .null
                 default: return .null
                 }
             },
             setter: { entity, value, index in
                 guard let e = entity as? IfcClassificationReference else { return }
                 switch index {
-                case 0: e.description = value.isNull ? nil : value.stringValue
-                case 1: e.sort = value.isNull ? nil : value.stringValue
+                case 0: e.referencedSource = value.isNull ? nil : IFC4X3.IfcClassificationReferenceSelect.stepDecode(value)
+                case 1: e.description = value.isNull ? nil : value.stringValue
+                case 2: e.sort = value.isNull ? nil : value.stringValue
                 default: break
                 }
             }
@@ -3540,19 +3542,21 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcCoordinateOperation.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCCOORDINATEOPERATION",
-            ownAttributes: [STEPAttributeDescriptor(name: "targetCRS", kind: .entityRef, isOptional: true)],
+            ownAttributes: [STEPAttributeDescriptor(name: "sourceCRS", kind: .select, isOptional: false), STEPAttributeDescriptor(name: "targetCRS", kind: .entityRef, isOptional: true)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcCoordinateOperation else { return .null }
                 switch index {
-                case 0: return e.targetCRS.map { .entityRef($0) } ?? .null
+                case 0: return e.sourceCRS.map { $0.stepEncode() } ?? .null
+                case 1: return e.targetCRS.map { .entityRef($0) } ?? .null
                 default: return .null
                 }
             },
             setter: { entity, value, index in
                 guard let e = entity as? IfcCoordinateOperation else { return }
                 switch index {
-                case 0: e.targetCRS = value.isNull ? nil : value.entityValue as? IFC4X3.IfcCoordinateReferenceSystem
+                case 0: e.sourceCRS = value.isNull ? nil : IFC4X3.IfcCoordinateReferenceSystemSelect.stepDecode(value)
+                case 1: e.targetCRS = value.isNull ? nil : value.entityValue as? IFC4X3.IfcCoordinateReferenceSystem
                 default: break
                 }
             }
@@ -6954,23 +6958,25 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcGeometricRepresentationSubContext.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCGEOMETRICREPRESENTATIONSUBCONTEXT",
-            ownAttributes: [STEPAttributeDescriptor(name: "targetScale", kind: .real, isOptional: true), STEPAttributeDescriptor(name: "targetView", kind: .enumeration, isOptional: true), STEPAttributeDescriptor(name: "userDefinedTargetView", kind: .string, isOptional: true)],
+            ownAttributes: [STEPAttributeDescriptor(name: "parentContext", kind: .entityRef, isOptional: false), STEPAttributeDescriptor(name: "targetScale", kind: .real, isOptional: true), STEPAttributeDescriptor(name: "targetView", kind: .enumeration, isOptional: true), STEPAttributeDescriptor(name: "userDefinedTargetView", kind: .string, isOptional: true)],
             derivedOverrides: ["worldCoordinateSystem", "coordinateSpaceDimension", "trueNorth", "precision"],
             getter: { entity, index in
                 guard let e = entity as? IfcGeometricRepresentationSubContext else { return .null }
                 switch index {
-                case 0: return e.targetScale.map { .real($0) } ?? .null
-                case 1: return e.targetView.map { .enumeration($0.rawValue) } ?? .null
-                case 2: return e.userDefinedTargetView.map { .string($0) } ?? .null
+                case 0: return e.parentContext.map { .entityRef($0) } ?? .null
+                case 1: return e.targetScale.map { .real($0) } ?? .null
+                case 2: return e.targetView.map { .enumeration($0.rawValue) } ?? .null
+                case 3: return e.userDefinedTargetView.map { .string($0) } ?? .null
                 default: return .null
                 }
             },
             setter: { entity, value, index in
                 guard let e = entity as? IfcGeometricRepresentationSubContext else { return }
                 switch index {
-                case 0: e.targetScale = value.isNull ? nil : value.realValue
-                case 1: e.targetView = value.isNull ? nil : value.stringValue.flatMap { IFC4X3.IfcGeometricProjectionEnum(rawValue: $0) }
-                case 2: e.userDefinedTargetView = value.isNull ? nil : value.stringValue
+                case 0: e.parentContext = value.isNull ? nil : value.entityValue as? IFC4X3.IfcGeometricRepresentationContext
+                case 1: e.targetScale = value.isNull ? nil : value.realValue
+                case 2: e.targetView = value.isNull ? nil : value.stringValue.flatMap { IFC4X3.IfcGeometricProjectionEnum(rawValue: $0) }
+                case 3: e.userDefinedTargetView = value.isNull ? nil : value.stringValue
                 default: break
                 }
             }
@@ -7371,23 +7377,25 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcIndexedColourMap.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCINDEXEDCOLOURMAP",
-            ownAttributes: [STEPAttributeDescriptor(name: "opacity", kind: .real, isOptional: true), STEPAttributeDescriptor(name: "colours", kind: .entityRef, isOptional: true), STEPAttributeDescriptor(name: "colourIndex", kind: .list, isOptional: true)],
+            ownAttributes: [STEPAttributeDescriptor(name: "mappedTo", kind: .entityRef, isOptional: false), STEPAttributeDescriptor(name: "opacity", kind: .real, isOptional: true), STEPAttributeDescriptor(name: "colours", kind: .entityRef, isOptional: true), STEPAttributeDescriptor(name: "colourIndex", kind: .list, isOptional: true)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcIndexedColourMap else { return .null }
                 switch index {
-                case 0: return e.opacity.map { .real($0) } ?? .null
-                case 1: return e.colours.map { .entityRef($0) } ?? .null
-                case 2: return .list(e.colourIndex.map { .integer($0) })
+                case 0: return e.mappedTo.map { .entityRef($0) } ?? .null
+                case 1: return e.opacity.map { .real($0) } ?? .null
+                case 2: return e.colours.map { .entityRef($0) } ?? .null
+                case 3: return .list(e.colourIndex.map { .integer($0) })
                 default: return .null
                 }
             },
             setter: { entity, value, index in
                 guard let e = entity as? IfcIndexedColourMap else { return }
                 switch index {
-                case 0: e.opacity = value.isNull ? nil : value.realValue
-                case 1: e.colours = value.isNull ? nil : value.entityValue as? IFC4X3.IfcColourRgbList
-                case 2: if case .list(let items) = value { e.colourIndex = items.compactMap { $0.integerValue } }
+                case 0: e.mappedTo = value.isNull ? nil : value.entityValue as? IFC4X3.IfcTessellatedFaceSet
+                case 1: e.opacity = value.isNull ? nil : value.realValue
+                case 2: e.colours = value.isNull ? nil : value.entityValue as? IFC4X3.IfcColourRgbList
+                case 3: if case .list(let items) = value { e.colourIndex = items.compactMap { $0.integerValue } }
                 default: break
                 }
             }
@@ -7439,14 +7447,21 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcIndexedPolygonalFaceWithVoids.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCINDEXEDPOLYGONALFACEWITHVOIDS",
-            ownAttributes: [],
+            ownAttributes: [STEPAttributeDescriptor(name: "innerCoordIndices", kind: .list, isOptional: false)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcIndexedPolygonalFaceWithVoids else { return .null }
-                return .null
+                switch index {
+                case 0: return .list(e.innerCoordIndices.map { .integer($0) })
+                default: return .null
+                }
             },
             setter: { entity, value, index in
                 guard let e = entity as? IfcIndexedPolygonalFaceWithVoids else { return }
+                switch index {
+                case 0: if case .list(let items) = value { e.innerCoordIndices = items.compactMap { $0.integerValue } }
+                default: break
+                }
             }
         )
 
@@ -7472,19 +7487,21 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcIndexedTextureMap.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCINDEXEDTEXTUREMAP",
-            ownAttributes: [STEPAttributeDescriptor(name: "texCoords", kind: .entityRef, isOptional: true)],
+            ownAttributes: [STEPAttributeDescriptor(name: "mappedTo", kind: .entityRef, isOptional: false), STEPAttributeDescriptor(name: "texCoords", kind: .entityRef, isOptional: true)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcIndexedTextureMap else { return .null }
                 switch index {
-                case 0: return e.texCoords.map { .entityRef($0) } ?? .null
+                case 0: return e.mappedTo.map { .entityRef($0) } ?? .null
+                case 1: return e.texCoords.map { .entityRef($0) } ?? .null
                 default: return .null
                 }
             },
             setter: { entity, value, index in
                 guard let e = entity as? IfcIndexedTextureMap else { return }
                 switch index {
-                case 0: e.texCoords = value.isNull ? nil : value.entityValue as? IFC4X3.IfcTextureVertexList
+                case 0: e.mappedTo = value.isNull ? nil : value.entityValue as? IFC4X3.IfcTessellatedFaceSet
+                case 1: e.texCoords = value.isNull ? nil : value.entityValue as? IFC4X3.IfcTextureVertexList
                 default: break
                 }
             }
@@ -8535,14 +8552,21 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcMaterialDefinitionRepresentation.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCMATERIALDEFINITIONREPRESENTATION",
-            ownAttributes: [],
+            ownAttributes: [STEPAttributeDescriptor(name: "representedMaterial", kind: .entityRef, isOptional: false)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcMaterialDefinitionRepresentation else { return .null }
-                return .null
+                switch index {
+                case 0: return e.representedMaterial.map { .entityRef($0) } ?? .null
+                default: return .null
+                }
             },
             setter: { entity, value, index in
                 guard let e = entity as? IfcMaterialDefinitionRepresentation else { return }
+                switch index {
+                case 0: e.representedMaterial = value.isNull ? nil : value.entityValue as? IFC4X3.IfcMaterial
+                default: break
+                }
             }
         )
 
@@ -8796,14 +8820,21 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcMaterialProperties.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCMATERIALPROPERTIES",
-            ownAttributes: [],
+            ownAttributes: [STEPAttributeDescriptor(name: "material", kind: .entityRef, isOptional: false)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcMaterialProperties else { return .null }
-                return .null
+                switch index {
+                case 0: return e.material.map { .entityRef($0) } ?? .null
+                default: return .null
+                }
             },
             setter: { entity, value, index in
                 guard let e = entity as? IfcMaterialProperties else { return }
+                switch index {
+                case 0: e.material = value.isNull ? nil : value.entityValue as? IFC4X3.IfcMaterialDefinition
+                default: break
+                }
             }
         )
 
@@ -10779,14 +10810,21 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcProfileProperties.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCPROFILEPROPERTIES",
-            ownAttributes: [],
+            ownAttributes: [STEPAttributeDescriptor(name: "profileDefinition", kind: .entityRef, isOptional: false)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcProfileProperties else { return .null }
-                return .null
+                switch index {
+                case 0: return e.profileDefinition.map { .entityRef($0) } ?? .null
+                default: return .null
+                }
             },
             setter: { entity, value, index in
                 guard let e = entity as? IfcProfileProperties else { return }
+                switch index {
+                case 0: e.profileDefinition = value.isNull ? nil : value.entityValue as? IFC4X3.IfcProfileDef
+                default: break
+                }
             }
         )
 
@@ -12220,19 +12258,21 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcRelAggregates.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCRELAGGREGATES",
-            ownAttributes: [STEPAttributeDescriptor(name: "relatedObjects", kind: .list, isOptional: false)],
+            ownAttributes: [STEPAttributeDescriptor(name: "relatingObject", kind: .entityRef, isOptional: false), STEPAttributeDescriptor(name: "relatedObjects", kind: .list, isOptional: false)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcRelAggregates else { return .null }
                 switch index {
-                case 0: return .list(e.relatedObjects.map { .entityRef($0) })
+                case 0: return e.relatingObject.map { .entityRef($0) } ?? .null
+                case 1: return .list(e.relatedObjects.map { .entityRef($0) })
                 default: return .null
                 }
             },
             setter: { entity, value, index in
                 guard let e = entity as? IfcRelAggregates else { return }
                 switch index {
-                case 0: if case .list(let items) = value { e.relatedObjects = items.compactMap { $0.entityValue as? IFC4X3.IfcObjectDefinition } }
+                case 0: e.relatingObject = value.isNull ? nil : value.entityValue as? IFC4X3.IfcObjectDefinition
+                case 1: if case .list(let items) = value { e.relatedObjects = items.compactMap { $0.entityValue as? IFC4X3.IfcObjectDefinition } }
                 default: break
                 }
             }
@@ -12771,12 +12811,13 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcRelContainedInSpatialStructure.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCRELCONTAINEDINSPATIALSTRUCTURE",
-            ownAttributes: [STEPAttributeDescriptor(name: "relatedElements", kind: .list, isOptional: false)],
+            ownAttributes: [STEPAttributeDescriptor(name: "relatedElements", kind: .list, isOptional: false), STEPAttributeDescriptor(name: "relatingStructure", kind: .entityRef, isOptional: false)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcRelContainedInSpatialStructure else { return .null }
                 switch index {
                 case 0: return .list(e.relatedElements.map { .entityRef($0) })
+                case 1: return e.relatingStructure.map { .entityRef($0) } ?? .null
                 default: return .null
                 }
             },
@@ -12784,6 +12825,7 @@ extension IFC4X3 {
                 guard let e = entity as? IfcRelContainedInSpatialStructure else { return }
                 switch index {
                 case 0: if case .list(let items) = value { e.relatedElements = items.compactMap { $0.entityValue as? IFC4X3.IfcProduct } }
+                case 1: e.relatingStructure = value.isNull ? nil : value.entityValue as? IFC4X3.IfcSpatialElement
                 default: break
                 }
             }
@@ -12835,19 +12877,21 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcRelDeclares.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCRELDECLARES",
-            ownAttributes: [STEPAttributeDescriptor(name: "relatedDefinitions", kind: .select, isOptional: false)],
+            ownAttributes: [STEPAttributeDescriptor(name: "relatingContext", kind: .entityRef, isOptional: false), STEPAttributeDescriptor(name: "relatedDefinitions", kind: .select, isOptional: false)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcRelDeclares else { return .null }
                 switch index {
-                case 0: return e.relatedDefinitions.map { $0.stepEncode() } ?? .null
+                case 0: return e.relatingContext.map { .entityRef($0) } ?? .null
+                case 1: return e.relatedDefinitions.map { $0.stepEncode() } ?? .null
                 default: return .null
                 }
             },
             setter: { entity, value, index in
                 guard let e = entity as? IfcRelDeclares else { return }
                 switch index {
-                case 0: e.relatedDefinitions = value.isNull ? nil : IFC4X3.IfcDefinitionSelect.stepDecode(value)
+                case 0: e.relatingContext = value.isNull ? nil : value.entityValue as? IFC4X3.IfcContext
+                case 1: e.relatedDefinitions = value.isNull ? nil : IFC4X3.IfcDefinitionSelect.stepDecode(value)
                 default: break
                 }
             }
@@ -12881,12 +12925,13 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcRelDefinesByObject.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCRELDEFINESBYOBJECT",
-            ownAttributes: [STEPAttributeDescriptor(name: "relatedObjects", kind: .list, isOptional: false)],
+            ownAttributes: [STEPAttributeDescriptor(name: "relatedObjects", kind: .list, isOptional: false), STEPAttributeDescriptor(name: "relatingObject", kind: .entityRef, isOptional: false)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcRelDefinesByObject else { return .null }
                 switch index {
                 case 0: return .list(e.relatedObjects.map { .entityRef($0) })
+                case 1: return e.relatingObject.map { .entityRef($0) } ?? .null
                 default: return .null
                 }
             },
@@ -12894,6 +12939,7 @@ extension IFC4X3 {
                 guard let e = entity as? IfcRelDefinesByObject else { return }
                 switch index {
                 case 0: if case .list(let items) = value { e.relatedObjects = items.compactMap { $0.entityValue as? IFC4X3.IfcObject } }
+                case 1: e.relatingObject = value.isNull ? nil : value.entityValue as? IFC4X3.IfcObject
                 default: break
                 }
             }
@@ -12901,19 +12947,21 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcRelDefinesByProperties.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCRELDEFINESBYPROPERTIES",
-            ownAttributes: [STEPAttributeDescriptor(name: "relatingPropertyDefinition", kind: .select, isOptional: false)],
+            ownAttributes: [STEPAttributeDescriptor(name: "relatedObjects", kind: .list, isOptional: false), STEPAttributeDescriptor(name: "relatingPropertyDefinition", kind: .select, isOptional: false)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcRelDefinesByProperties else { return .null }
                 switch index {
-                case 0: return e.relatingPropertyDefinition.map { $0.stepEncode() } ?? .null
+                case 0: return .list(e.relatedObjects.map { .entityRef($0) })
+                case 1: return e.relatingPropertyDefinition.map { $0.stepEncode() } ?? .null
                 default: return .null
                 }
             },
             setter: { entity, value, index in
                 guard let e = entity as? IfcRelDefinesByProperties else { return }
                 switch index {
-                case 0: e.relatingPropertyDefinition = value.isNull ? nil : IFC4X3.IfcPropertySetDefinitionSelect.stepDecode(value)
+                case 0: if case .list(let items) = value { e.relatedObjects = items.compactMap { $0.entityValue as? IFC4X3.IfcObjectDefinition } }
+                case 1: e.relatingPropertyDefinition = value.isNull ? nil : IFC4X3.IfcPropertySetDefinitionSelect.stepDecode(value)
                 default: break
                 }
             }
@@ -12943,19 +12991,21 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcRelDefinesByType.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCRELDEFINESBYTYPE",
-            ownAttributes: [STEPAttributeDescriptor(name: "relatingType", kind: .entityRef, isOptional: true)],
+            ownAttributes: [STEPAttributeDescriptor(name: "relatedObjects", kind: .list, isOptional: false), STEPAttributeDescriptor(name: "relatingType", kind: .entityRef, isOptional: true)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcRelDefinesByType else { return .null }
                 switch index {
-                case 0: return e.relatingType.map { .entityRef($0) } ?? .null
+                case 0: return .list(e.relatedObjects.map { .entityRef($0) })
+                case 1: return e.relatingType.map { .entityRef($0) } ?? .null
                 default: return .null
                 }
             },
             setter: { entity, value, index in
                 guard let e = entity as? IfcRelDefinesByType else { return }
                 switch index {
-                case 0: e.relatingType = value.isNull ? nil : value.entityValue as? IFC4X3.IfcTypeObject
+                case 0: if case .list(let items) = value { e.relatedObjects = items.compactMap { $0.entityValue as? IFC4X3.IfcObject } }
+                case 1: e.relatingType = value.isNull ? nil : value.entityValue as? IFC4X3.IfcTypeObject
                 default: break
                 }
             }
@@ -12963,19 +13013,21 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcRelFillsElement.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCRELFILLSELEMENT",
-            ownAttributes: [STEPAttributeDescriptor(name: "relatedBuildingElement", kind: .entityRef, isOptional: true)],
+            ownAttributes: [STEPAttributeDescriptor(name: "relatingOpeningElement", kind: .entityRef, isOptional: false), STEPAttributeDescriptor(name: "relatedBuildingElement", kind: .entityRef, isOptional: true)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcRelFillsElement else { return .null }
                 switch index {
-                case 0: return e.relatedBuildingElement.map { .entityRef($0) } ?? .null
+                case 0: return e.relatingOpeningElement.map { .entityRef($0) } ?? .null
+                case 1: return e.relatedBuildingElement.map { .entityRef($0) } ?? .null
                 default: return .null
                 }
             },
             setter: { entity, value, index in
                 guard let e = entity as? IfcRelFillsElement else { return }
                 switch index {
-                case 0: e.relatedBuildingElement = value.isNull ? nil : value.entityValue as? IFC4X3.IfcElement
+                case 0: e.relatingOpeningElement = value.isNull ? nil : value.entityValue as? IFC4X3.IfcOpeningElement
+                case 1: e.relatedBuildingElement = value.isNull ? nil : value.entityValue as? IFC4X3.IfcElement
                 default: break
                 }
             }
@@ -13035,19 +13087,21 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcRelNests.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCRELNESTS",
-            ownAttributes: [STEPAttributeDescriptor(name: "relatedObjects", kind: .list, isOptional: false)],
+            ownAttributes: [STEPAttributeDescriptor(name: "relatingObject", kind: .entityRef, isOptional: false), STEPAttributeDescriptor(name: "relatedObjects", kind: .list, isOptional: false)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcRelNests else { return .null }
                 switch index {
-                case 0: return .list(e.relatedObjects.map { .entityRef($0) })
+                case 0: return e.relatingObject.map { .entityRef($0) } ?? .null
+                case 1: return .list(e.relatedObjects.map { .entityRef($0) })
                 default: return .null
                 }
             },
             setter: { entity, value, index in
                 guard let e = entity as? IfcRelNests else { return }
                 switch index {
-                case 0: if case .list(let items) = value { e.relatedObjects = items.compactMap { $0.entityValue as? IFC4X3.IfcObjectDefinition } }
+                case 0: e.relatingObject = value.isNull ? nil : value.entityValue as? IFC4X3.IfcObjectDefinition
+                case 1: if case .list(let items) = value { e.relatedObjects = items.compactMap { $0.entityValue as? IFC4X3.IfcObjectDefinition } }
                 default: break
                 }
             }
@@ -13077,19 +13131,21 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcRelProjectsElement.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCRELPROJECTSELEMENT",
-            ownAttributes: [STEPAttributeDescriptor(name: "relatedFeatureElement", kind: .entityRef, isOptional: true)],
+            ownAttributes: [STEPAttributeDescriptor(name: "relatingElement", kind: .entityRef, isOptional: false), STEPAttributeDescriptor(name: "relatedFeatureElement", kind: .entityRef, isOptional: true)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcRelProjectsElement else { return .null }
                 switch index {
-                case 0: return e.relatedFeatureElement.map { .entityRef($0) } ?? .null
+                case 0: return e.relatingElement.map { .entityRef($0) } ?? .null
+                case 1: return e.relatedFeatureElement.map { .entityRef($0) } ?? .null
                 default: return .null
                 }
             },
             setter: { entity, value, index in
                 guard let e = entity as? IfcRelProjectsElement else { return }
                 switch index {
-                case 0: e.relatedFeatureElement = value.isNull ? nil : value.entityValue as? IFC4X3.IfcFeatureElementAddition
+                case 0: e.relatingElement = value.isNull ? nil : value.entityValue as? IFC4X3.IfcElement
+                case 1: e.relatedFeatureElement = value.isNull ? nil : value.entityValue as? IFC4X3.IfcFeatureElementAddition
                 default: break
                 }
             }
@@ -13097,12 +13153,13 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcRelReferencedInSpatialStructure.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCRELREFERENCEDINSPATIALSTRUCTURE",
-            ownAttributes: [STEPAttributeDescriptor(name: "relatedElements", kind: .select, isOptional: false)],
+            ownAttributes: [STEPAttributeDescriptor(name: "relatedElements", kind: .select, isOptional: false), STEPAttributeDescriptor(name: "relatingStructure", kind: .entityRef, isOptional: false)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcRelReferencedInSpatialStructure else { return .null }
                 switch index {
                 case 0: return e.relatedElements.map { $0.stepEncode() } ?? .null
+                case 1: return e.relatingStructure.map { .entityRef($0) } ?? .null
                 default: return .null
                 }
             },
@@ -13110,6 +13167,7 @@ extension IFC4X3 {
                 guard let e = entity as? IfcRelReferencedInSpatialStructure else { return }
                 switch index {
                 case 0: e.relatedElements = value.isNull ? nil : IFC4X3.IfcSpatialReferenceSelect.stepDecode(value)
+                case 1: e.relatingStructure = value.isNull ? nil : value.entityValue as? IFC4X3.IfcSpatialElement
                 default: break
                 }
             }
@@ -13235,19 +13293,21 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcRelVoidsElement.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCRELVOIDSELEMENT",
-            ownAttributes: [STEPAttributeDescriptor(name: "relatedOpeningElement", kind: .entityRef, isOptional: true)],
+            ownAttributes: [STEPAttributeDescriptor(name: "relatingBuildingElement", kind: .entityRef, isOptional: false), STEPAttributeDescriptor(name: "relatedOpeningElement", kind: .entityRef, isOptional: true)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcRelVoidsElement else { return .null }
                 switch index {
-                case 0: return e.relatedOpeningElement.map { .entityRef($0) } ?? .null
+                case 0: return e.relatingBuildingElement.map { .entityRef($0) } ?? .null
+                case 1: return e.relatedOpeningElement.map { .entityRef($0) } ?? .null
                 default: return .null
                 }
             },
             setter: { entity, value, index in
                 guard let e = entity as? IfcRelVoidsElement else { return }
                 switch index {
-                case 0: e.relatedOpeningElement = value.isNull ? nil : value.entityValue as? IFC4X3.IfcFeatureElementSubtraction
+                case 0: e.relatingBuildingElement = value.isNull ? nil : value.entityValue as? IFC4X3.IfcElement
+                case 1: e.relatedOpeningElement = value.isNull ? nil : value.entityValue as? IFC4X3.IfcFeatureElementSubtraction
                 default: break
                 }
             }
@@ -14166,7 +14226,7 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcShapeAspect.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCSHAPEASPECT",
-            ownAttributes: [STEPAttributeDescriptor(name: "shapeRepresentations", kind: .list, isOptional: false), STEPAttributeDescriptor(name: "name", kind: .string, isOptional: true), STEPAttributeDescriptor(name: "description", kind: .string, isOptional: true), STEPAttributeDescriptor(name: "productDefinitional", kind: .logical, isOptional: true)],
+            ownAttributes: [STEPAttributeDescriptor(name: "shapeRepresentations", kind: .list, isOptional: false), STEPAttributeDescriptor(name: "name", kind: .string, isOptional: true), STEPAttributeDescriptor(name: "description", kind: .string, isOptional: true), STEPAttributeDescriptor(name: "productDefinitional", kind: .logical, isOptional: true), STEPAttributeDescriptor(name: "partOfProductDefinitionShape", kind: .select, isOptional: true)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcShapeAspect else { return .null }
@@ -14175,6 +14235,7 @@ extension IFC4X3 {
                 case 1: return e.name.map { .string($0) } ?? .null
                 case 2: return e.description.map { .string($0) } ?? .null
                 case 3: return e.productDefinitional.map { .logical($0) } ?? .null
+                case 4: return e.partOfProductDefinitionShape.map { $0.stepEncode() } ?? .null
                 default: return .null
                 }
             },
@@ -14185,6 +14246,7 @@ extension IFC4X3 {
                 case 1: e.name = value.isNull ? nil : value.stringValue
                 case 2: e.description = value.isNull ? nil : value.stringValue
                 case 3: e.productDefinitional = value.isNull ? nil : value.logicalValue
+                case 4: e.partOfProductDefinitionShape = value.isNull ? nil : IFC4X3.IfcProductRepresentationSelect.stepDecode(value)
                 default: break
                 }
             }
@@ -15660,21 +15722,23 @@ extension IFC4X3 {
 
         d[ObjectIdentifier(IfcStyledItem.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCSTYLEDITEM",
-            ownAttributes: [STEPAttributeDescriptor(name: "styles", kind: .list, isOptional: false), STEPAttributeDescriptor(name: "name", kind: .string, isOptional: true)],
+            ownAttributes: [STEPAttributeDescriptor(name: "item", kind: .entityRef, isOptional: true), STEPAttributeDescriptor(name: "styles", kind: .list, isOptional: false), STEPAttributeDescriptor(name: "name", kind: .string, isOptional: true)],
             derivedOverrides: [],
             getter: { entity, index in
                 guard let e = entity as? IfcStyledItem else { return .null }
                 switch index {
-                case 0: return .list(e.styles.map { .entityRef($0) })
-                case 1: return e.name.map { .string($0) } ?? .null
+                case 0: return e.item.map { .entityRef($0) } ?? .null
+                case 1: return .list(e.styles.map { .entityRef($0) })
+                case 2: return e.name.map { .string($0) } ?? .null
                 default: return .null
                 }
             },
             setter: { entity, value, index in
                 guard let e = entity as? IfcStyledItem else { return }
                 switch index {
-                case 0: if case .list(let items) = value { e.styles = items.compactMap { $0.entityValue as? IFC4X3.IfcPresentationStyle } }
-                case 1: e.name = value.isNull ? nil : value.stringValue
+                case 0: e.item = value.isNull ? nil : value.entityValue as? IFC4X3.IfcRepresentationItem
+                case 1: if case .list(let items) = value { e.styles = items.compactMap { $0.entityValue as? IFC4X3.IfcPresentationStyle } }
+                case 2: e.name = value.isNull ? nil : value.stringValue
                 default: break
                 }
             }

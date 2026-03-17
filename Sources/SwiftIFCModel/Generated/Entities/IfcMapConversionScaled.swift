@@ -10,6 +10,7 @@ extension IFC4X3 {
 
         public init(
             targetCRS: IfcCoordinateReferenceSystem? = nil,
+            sourceCRS: IfcCoordinateReferenceSystemSelect? = nil,
             eastings: IfcLengthMeasure? = nil,
             northings: IfcLengthMeasure? = nil,
             orthogonalHeight: IfcLengthMeasure? = nil,
@@ -25,6 +26,7 @@ extension IFC4X3 {
             self.factorZ = factorZ
             super.init(
                 targetCRS: targetCRS,
+                sourceCRS: sourceCRS,
                 eastings: eastings,
                 northings: northings,
                 orthogonalHeight: orthogonalHeight,

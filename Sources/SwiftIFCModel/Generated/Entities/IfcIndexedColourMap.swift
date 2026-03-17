@@ -7,15 +7,18 @@ extension IFC4X3 {
         public var opacity: IfcNormalisedRatioMeasure? = nil
         public var colourIndex: [IfcPositiveInteger] = []
         public var colours: IfcColourRgbList? = nil
+        public var mappedTo: IfcTessellatedFaceSet? = nil
 
         public init(
             opacity: IfcNormalisedRatioMeasure? = nil,
             colourIndex: [IfcPositiveInteger] = [],
-            colours: IfcColourRgbList? = nil
+            colours: IfcColourRgbList? = nil,
+            mappedTo: IfcTessellatedFaceSet? = nil
         ) {
             self.opacity = opacity
             self.colourIndex = colourIndex
             self.colours = colours
+            self.mappedTo = mappedTo
             super.init()
         }
     }

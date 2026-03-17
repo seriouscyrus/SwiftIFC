@@ -13,6 +13,7 @@ extension IFC4X3 {
 
         public init(
             targetCRS: IfcCoordinateReferenceSystem? = nil,
+            sourceCRS: IfcCoordinateReferenceSystemSelect? = nil,
             eastings: IfcLengthMeasure? = nil,
             northings: IfcLengthMeasure? = nil,
             orthogonalHeight: IfcLengthMeasure? = nil,
@@ -27,7 +28,8 @@ extension IFC4X3 {
             self.xAxisOrdinate = xAxisOrdinate
             self.scale = scale
             super.init(
-                targetCRS: targetCRS
+                targetCRS: targetCRS,
+                sourceCRS: sourceCRS
             )
         }
     }
