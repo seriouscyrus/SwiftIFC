@@ -443,7 +443,7 @@ public struct STEPEncoder {
         }
 
         // General case: use Swift's default representation, ensure decimal point.
-        let s = String(value)
+        let s = String(value).uppercased()
         if !s.contains(".") && !s.contains("e") && !s.contains("E") {
             return s + "."
         }
