@@ -42,13 +42,11 @@ public extension matrix_float4x4 {
     }
     
     var zDirection: vector_float3 {
-        let vec4 = simd_mul(self, vector_float4(0.0, 0.0, 1.0, 1.0))
-        return vector_float3(vec4.x, vec4.y, vec4.z)
+        normalize(vector_float3(columns.2.x, columns.2.y, columns.2.z))
     }
     
     var xDirection: vector_float3 {
-        let vec4 = simd_mul(self, vector_float4(1.0, 0.0, 0.0, 1.0))
-        return vector_float3(vec4.x, vec4.y, vec4.z)
+        normalize(vector_float3(columns.0.x, columns.0.y, columns.0.z))
     }
     
     var ifcAxis2Placement3D: IFC4X3.IfcAxis2Placement3D {
