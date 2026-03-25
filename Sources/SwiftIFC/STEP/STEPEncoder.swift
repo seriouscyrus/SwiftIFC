@@ -407,6 +407,7 @@ public struct STEPEncoder {
             return "$"
 
         case .list(let items):
+            if items.isEmpty { return "$" }
             let encoded = items.map { encodeValue($0, idMap: idMap) }
             return "(\(encoded.joined(separator: ",")))"
 
