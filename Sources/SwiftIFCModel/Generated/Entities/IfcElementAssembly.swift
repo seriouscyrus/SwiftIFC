@@ -21,8 +21,8 @@ extension IFC4X3 {
             objectPlacement: IfcObjectPlacement? = nil,
             representation: IfcProductRepresentation? = nil,
             tag: IfcIdentifier? = nil,
-            hasProjections: IfcRelProjectsElement? = nil,
-            hasOpenings: IfcRelVoidsElement? = nil,
+            hasProjections: [IfcRelProjectsElement] = [],
+            hasOpenings: [IfcRelVoidsElement] = [],
             assemblyPlace: IfcAssemblyPlaceEnum? = nil,
             predefinedType: IfcElementAssemblyTypeEnum? = nil
         ) {

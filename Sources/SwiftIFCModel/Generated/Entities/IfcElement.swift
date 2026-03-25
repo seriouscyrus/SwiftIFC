@@ -5,8 +5,8 @@ import Foundation
 extension IFC4X3 {
     public class IfcElement: IfcProduct, @unchecked Sendable { // ABSTRACT
         public var tag: IfcIdentifier? = nil
-        public var hasProjections: IfcRelProjectsElement? = nil
-        public var hasOpenings: IfcRelVoidsElement? = nil
+        public var hasProjections: [IfcRelProjectsElement] = []
+        public var hasOpenings: [IfcRelVoidsElement] = []
 
         public init(
             globalId: IfcGloballyUniqueId? = nil,
@@ -22,8 +22,8 @@ extension IFC4X3 {
             objectPlacement: IfcObjectPlacement? = nil,
             representation: IfcProductRepresentation? = nil,
             tag: IfcIdentifier? = nil,
-            hasProjections: IfcRelProjectsElement? = nil,
-            hasOpenings: IfcRelVoidsElement? = nil
+            hasProjections: [IfcRelProjectsElement] = [],
+            hasOpenings: [IfcRelVoidsElement] = []
         ) {
             self.tag = tag
             self.hasProjections = hasProjections

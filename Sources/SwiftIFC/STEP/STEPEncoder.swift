@@ -228,10 +228,10 @@ public struct STEPEncoder {
 
         // IfcElement inverse attributes
         if let element = entity as? IFC4X3.IfcElement {
-            if let rel = element.hasProjections {
+            for rel in element.hasProjections {
                 collectEntities(rel, visited: &visited, result: &result)
             }
-            if let rel = element.hasOpenings {
+            for rel in element.hasOpenings {
                 collectEntities(rel, visited: &visited, result: &result)
             }
         }

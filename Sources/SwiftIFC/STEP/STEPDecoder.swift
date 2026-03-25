@@ -368,13 +368,13 @@ public struct STEPDecoder {
             // IfcRelProjectsElement.relatingElement → target.hasProjections
             if let rel = entity as? IFC4X3.IfcRelProjectsElement,
                let target = rel.relatingElement {
-                target.hasProjections = rel
+                target.hasProjections.append(rel)
             }
 
             // IfcRelVoidsElement.relatingBuildingElement → target.hasOpenings
             if let rel = entity as? IFC4X3.IfcRelVoidsElement,
                let target = rel.relatingBuildingElement {
-                target.hasOpenings = rel
+                target.hasOpenings.append(rel)
             }
         }
     }
