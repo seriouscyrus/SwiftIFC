@@ -64,6 +64,10 @@ public extension Array where Element == vector_double2 {
     var ifcPolyline: IFC4X3.IfcPolyline {
         IFC4X3.IfcPolyline(points: ifcCartesianPoints)
     }
+    
+    var ifcPolyLoop: IFC4X3.IfcPolyLoop {
+        IFC4X3.IfcPolyLoop(polygon: ifcCartesianPoints)
+    }
 }
 
 public extension Array where Element == vector_double3 {
@@ -73,5 +77,9 @@ public extension Array where Element == vector_double3 {
     
     var ifcPolyline: IFC4X3.IfcPolyline {
         IFC4X3.IfcPolyline(points: ifcCartesianPoints)
+    }
+    
+    var ifcPolyLoop: IFC4X3.IfcPolyLoop {
+        IFC4X3.IfcPolyLoop(polygon: ifcCartesianPoints)
     }
 }
