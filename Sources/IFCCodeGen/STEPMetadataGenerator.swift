@@ -8,82 +8,105 @@ struct STEPMetadataGenerator {
         var output = fileHeader("STEPEntityConformances.swift")
         output += "import Foundation\n\n"
 
-        // Generate the descriptor registry as a computed property
-        output += "extension IFC4X3 {\n"
-        output += "    public static let stepDescriptors: [ObjectIdentifier: STEPEntityDescriptor] = {\n"
-        output += "        var d: [ObjectIdentifier: STEPEntityDescriptor] = [:]\n\n"
-
+        // Collect all eligible types
         let sortedTypes = xsdSchema.complexTypes.keys.sorted()
-        for typeName in sortedTypes {
-            guard let ct = xsdSchema.complexTypes[typeName] else { continue }
-            guard !infrastructureTypes.contains(typeName) else { continue }
-
-            let stepTypeName = typeName.uppercased()
-            let expressEntity = expressSchema.entities[typeName]
-
-            // Collect own direct attributes in EXPRESS order
-            let ownAttributes = buildOwnSTEPAttributes(
-                for: ct,
-                expressEntity: expressEntity,
-                typeName: typeName
-            )
-
-            // Collect derive overrides
-            let deriveOverrides = expressEntity?.deriveOverrides ?? []
-
-            // Build attribute descriptors array
-            var attrLines: [String] = []
-            for attr in ownAttributes {
-                attrLines.append("STEPAttributeDescriptor(name: \"\(attr.swiftName)\", kind: .\(attr.kind), isOptional: \(attr.isOptional))")
-            }
-
-            // Build derive overrides set
-            let overridesStr: String
-            if !deriveOverrides.isEmpty {
-                let names = deriveOverrides.map { "\"\(swiftPropertyName($0.attributeName))\"" }
-                overridesStr = "[\(names.joined(separator: ", "))]"
-            } else {
-                overridesStr = "[]"
-            }
-
-            output += "        d[ObjectIdentifier(\(typeName).self)] = STEPEntityDescriptor(\n"
-            output += "            stepTypeName: \"\(stepTypeName)\",\n"
-            output += "            ownAttributes: [\(attrLines.joined(separator: ", "))],\n"
-            output += "            derivedOverrides: \(overridesStr),\n"
-
-            // Getter closure
-            output += "            getter: { entity, index in\n"
-            output += "                guard let e = entity as? \(typeName) else { return .null }\n"
-            if ownAttributes.isEmpty {
-                output += "                return .null\n"
-            } else {
-                output += "                switch index {\n"
-                for (i, attr) in ownAttributes.enumerated() {
-                    output += "                case \(i): return \(generateGetter(attr, varPrefix: "e"))\n"
-                }
-                output += "                default: return .null\n"
-                output += "                }\n"
-            }
-            output += "            },\n"
-
-            // Setter closure
-            output += "            setter: { entity, value, index in\n"
-            output += "                guard let e = entity as? \(typeName) else { return }\n"
-            if !ownAttributes.isEmpty {
-                output += "                switch index {\n"
-                for (i, attr) in ownAttributes.enumerated() {
-                    output += "                case \(i): \(generateSetter(attr, varPrefix: "e"))\n"
-                }
-                output += "                default: break\n"
-                output += "                }\n"
-            }
-            output += "            }\n"
-
-            output += "        )\n\n"
+        let eligibleTypes = sortedTypes.filter { typeName in
+            guard xsdSchema.complexTypes[typeName] != nil else { return false }
+            return !infrastructureTypes.contains(typeName)
         }
 
+        // Split into chunks of 100 to avoid slow type-checker on huge closures
+        let chunkSize = 100
+        let chunks = stride(from: 0, to: eligibleTypes.count, by: chunkSize).map {
+            Array(eligibleTypes[$0..<min($0 + chunkSize, eligibleTypes.count)])
+        }
+
+        output += "extension IFC4X3 {\n"
+
+        // Generate the main property that calls all chunk functions
+        output += "    public static let stepDescriptors: [ObjectIdentifier: STEPEntityDescriptor] = {\n"
+        output += "        var d = [ObjectIdentifier: STEPEntityDescriptor]()\n"
+        output += "        d.reserveCapacity(\(eligibleTypes.count))\n"
+        for i in 0..<chunks.count {
+            output += "        registerDescriptors_\(i)(&d)\n"
+        }
         output += "        return d\n"
-        output += "    }()\n"
+        output += "    }()\n\n"
+
+        // Generate each chunk as a separate private static function
+        for (chunkIndex, chunk) in chunks.enumerated() {
+            output += "    private static func registerDescriptors_\(chunkIndex)(_ d: inout [ObjectIdentifier: STEPEntityDescriptor]) {\n"
+
+            for typeName in chunk {
+                guard let ct = xsdSchema.complexTypes[typeName] else { continue }
+
+                let stepTypeName = typeName.uppercased()
+                let expressEntity = expressSchema.entities[typeName]
+
+                // Collect own direct attributes in EXPRESS order
+                let ownAttributes = buildOwnSTEPAttributes(
+                    for: ct,
+                    expressEntity: expressEntity,
+                    typeName: typeName
+                )
+
+                // Collect derive overrides
+                let deriveOverrides = expressEntity?.deriveOverrides ?? []
+
+                // Build attribute descriptors array
+                var attrLines: [String] = []
+                for attr in ownAttributes {
+                    attrLines.append("STEPAttributeDescriptor(name: \"\(attr.swiftName)\", kind: .\(attr.kind), isOptional: \(attr.isOptional))")
+                }
+
+                // Build derive overrides set
+                let overridesStr: String
+                if !deriveOverrides.isEmpty {
+                    let names = deriveOverrides.map { "\"\(swiftPropertyName($0.attributeName))\"" }
+                    overridesStr = "[\(names.joined(separator: ", "))]"
+                } else {
+                    overridesStr = "[]"
+                }
+
+                output += "        d[ObjectIdentifier(\(typeName).self)] = STEPEntityDescriptor(\n"
+                output += "            stepTypeName: \"\(stepTypeName)\",\n"
+                output += "            ownAttributes: [\(attrLines.joined(separator: ", "))],\n"
+                output += "            derivedOverrides: \(overridesStr),\n"
+
+                // Getter closure
+                output += "            getter: { entity, index in\n"
+                output += "                guard let e = entity as? \(typeName) else { return .null }\n"
+                if ownAttributes.isEmpty {
+                    output += "                return .null\n"
+                } else {
+                    output += "                switch index {\n"
+                    for (i, attr) in ownAttributes.enumerated() {
+                        output += "                case \(i): return \(generateGetter(attr, varPrefix: "e"))\n"
+                    }
+                    output += "                default: return .null\n"
+                    output += "                }\n"
+                }
+                output += "            },\n"
+
+                // Setter closure
+                output += "            setter: { entity, value, index in\n"
+                output += "                guard let e = entity as? \(typeName) else { return }\n"
+                if !ownAttributes.isEmpty {
+                    output += "                switch index {\n"
+                    for (i, attr) in ownAttributes.enumerated() {
+                        output += "                case \(i): \(generateSetter(attr, varPrefix: "e"))\n"
+                    }
+                    output += "                default: break\n"
+                    output += "                }\n"
+                }
+                output += "            }\n"
+
+                output += "        )\n\n"
+            }
+
+            output += "    }\n\n"
+        }
+
         output += "}\n"
 
         return output

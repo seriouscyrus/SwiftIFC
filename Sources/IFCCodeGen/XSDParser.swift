@@ -255,14 +255,24 @@ final class XSDParser: NSObject, XMLParserDelegate {
         case ("element", .sequence(let ctName)):
             let elName = attrs["name"] ?? ""
             let isOptional = attrs["minOccurs"] == "0"
+            let maxOccurs = attrs["maxOccurs"]
+            let isUnbounded = maxOccurs == "unbounded" || (maxOccurs != nil && maxOccurs != "1")
             if let typeName = attrs["type"] {
                 // Direct typed element
                 let stripped = stripPrefix(typeName)
                 let nillable = attrs["nillable"] == "true"
-                currentSequenceElements.append(IFCSequenceElement(
-                    name: elName,
-                    kind: .singleEntity(typeName: stripped, isOptional: isOptional || nillable)
-                ))
+                if isUnbounded {
+                    // maxOccurs > 1 means this is a collection (e.g. HasOpenings SET [0:?])
+                    currentSequenceElements.append(IFCSequenceElement(
+                        name: elName,
+                        kind: .collection(elementTypeName: stripped, collectionType: "list", isOptional: isOptional)
+                    ))
+                } else {
+                    currentSequenceElements.append(IFCSequenceElement(
+                        name: elName,
+                        kind: .singleEntity(typeName: stripped, isOptional: isOptional || nillable)
+                    ))
+                }
                 // There might be no children, or there might be nested content — use ignored
                 startIgnoring()
             } else if attrs["ref"] != nil {

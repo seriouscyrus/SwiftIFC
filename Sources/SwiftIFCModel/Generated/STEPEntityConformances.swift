@@ -4,8 +4,21 @@ import Foundation
 
 extension IFC4X3 {
     public static let stepDescriptors: [ObjectIdentifier: STEPEntityDescriptor] = {
-        var d: [ObjectIdentifier: STEPEntityDescriptor] = [:]
+        var d = [ObjectIdentifier: STEPEntityDescriptor]()
+        d.reserveCapacity(882)
+        registerDescriptors_0(&d)
+        registerDescriptors_1(&d)
+        registerDescriptors_2(&d)
+        registerDescriptors_3(&d)
+        registerDescriptors_4(&d)
+        registerDescriptors_5(&d)
+        registerDescriptors_6(&d)
+        registerDescriptors_7(&d)
+        registerDescriptors_8(&d)
+        return d
+    }()
 
+    private static func registerDescriptors_0(_ d: inout [ObjectIdentifier: STEPEntityDescriptor]) {
         d[ObjectIdentifier(IfcActionRequest.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCACTIONREQUEST",
             ownAttributes: [STEPAttributeDescriptor(name: "predefinedType", kind: .enumeration, isOptional: true), STEPAttributeDescriptor(name: "status", kind: .string, isOptional: true), STEPAttributeDescriptor(name: "longDescription", kind: .string, isOptional: true)],
@@ -2142,6 +2155,9 @@ extension IFC4X3 {
             }
         )
 
+    }
+
+    private static func registerDescriptors_1(_ d: inout [ObjectIdentifier: STEPEntityDescriptor]) {
         d[ObjectIdentifier(IfcCartesianTransformationOperator2D.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCCARTESIANTRANSFORMATIONOPERATOR2D",
             ownAttributes: [],
@@ -4190,6 +4206,9 @@ extension IFC4X3 {
             }
         )
 
+    }
+
+    private static func registerDescriptors_2(_ d: inout [ObjectIdentifier: STEPEntityDescriptor]) {
         d[ObjectIdentifier(IfcDerivedUnit.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCDERIVEDUNIT",
             ownAttributes: [STEPAttributeDescriptor(name: "elements", kind: .list, isOptional: false), STEPAttributeDescriptor(name: "unitType", kind: .enumeration, isOptional: true), STEPAttributeDescriptor(name: "userDefinedType", kind: .string, isOptional: true), STEPAttributeDescriptor(name: "name", kind: .string, isOptional: true)],
@@ -6197,6 +6216,9 @@ extension IFC4X3 {
             }
         )
 
+    }
+
+    private static func registerDescriptors_3(_ d: inout [ObjectIdentifier: STEPEntityDescriptor]) {
         d[ObjectIdentifier(IfcFanType.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCFANTYPE",
             ownAttributes: [STEPAttributeDescriptor(name: "predefinedType", kind: .enumeration, isOptional: true)],
@@ -8147,6 +8169,9 @@ extension IFC4X3 {
             }
         )
 
+    }
+
+    private static func registerDescriptors_4(_ d: inout [ObjectIdentifier: STEPEntityDescriptor]) {
         d[ObjectIdentifier(IfcLine.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCLINE",
             ownAttributes: [STEPAttributeDescriptor(name: "pnt", kind: .entityRef, isOptional: true), STEPAttributeDescriptor(name: "dir", kind: .entityRef, isOptional: true)],
@@ -10279,6 +10304,9 @@ extension IFC4X3 {
             }
         )
 
+    }
+
+    private static func registerDescriptors_5(_ d: inout [ObjectIdentifier: STEPEntityDescriptor]) {
         d[ObjectIdentifier(IfcPointOnCurve.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCPOINTONCURVE",
             ownAttributes: [STEPAttributeDescriptor(name: "basisCurve", kind: .entityRef, isOptional: true), STEPAttributeDescriptor(name: "pointParameter", kind: .real, isOptional: true)],
@@ -12382,6 +12410,9 @@ extension IFC4X3 {
             }
         )
 
+    }
+
+    private static func registerDescriptors_6(_ d: inout [ObjectIdentifier: STEPEntityDescriptor]) {
         d[ObjectIdentifier(IfcRelAssignsToProcess.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCRELASSIGNSTOPROCESS",
             ownAttributes: [STEPAttributeDescriptor(name: "relatingProcess", kind: .select, isOptional: false), STEPAttributeDescriptor(name: "quantityInProcess", kind: .entityRef, isOptional: true)],
@@ -14561,6 +14592,9 @@ extension IFC4X3 {
             }
         )
 
+    }
+
+    private static func registerDescriptors_7(_ d: inout [ObjectIdentifier: STEPEntityDescriptor]) {
         d[ObjectIdentifier(IfcSolarDeviceType.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCSOLARDEVICETYPE",
             ownAttributes: [STEPAttributeDescriptor(name: "predefinedType", kind: .enumeration, isOptional: true)],
@@ -16675,6 +16709,9 @@ extension IFC4X3 {
             }
         )
 
+    }
+
+    private static func registerDescriptors_8(_ d: inout [ObjectIdentifier: STEPEntityDescriptor]) {
         d[ObjectIdentifier(IfcTendonAnchorType.self)] = STEPEntityDescriptor(
             stepTypeName: "IFCTENDONANCHORTYPE",
             ownAttributes: [STEPAttributeDescriptor(name: "predefinedType", kind: .enumeration, isOptional: true)],
@@ -18460,6 +18497,6 @@ extension IFC4X3 {
             }
         )
 
-        return d
-    }()
+    }
+
 }

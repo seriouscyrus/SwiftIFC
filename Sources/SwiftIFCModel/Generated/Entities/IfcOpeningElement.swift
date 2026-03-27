@@ -5,7 +5,7 @@ import Foundation
 extension IFC4X3 {
     public class IfcOpeningElement: IfcFeatureElementSubtraction, @unchecked Sendable {
         public var predefinedType: IfcOpeningElementTypeEnum? = nil
-        public var hasFillings: IfcRelFillsElement? = nil
+        public var hasFillings: [IfcRelFillsElement] = []
 
         public init(
             globalId: IfcGloballyUniqueId? = nil,
@@ -24,7 +24,7 @@ extension IFC4X3 {
             hasProjections: [IfcRelProjectsElement] = [],
             hasOpenings: [IfcRelVoidsElement] = [],
             predefinedType: IfcOpeningElementTypeEnum? = nil,
-            hasFillings: IfcRelFillsElement? = nil
+            hasFillings: [IfcRelFillsElement] = []
         ) {
             self.predefinedType = predefinedType
             self.hasFillings = hasFillings
