@@ -41,12 +41,16 @@ public extension matrix_float4x4 {
         vector_float3(columns.3.x, columns.3.y, columns.3.z)
     }
     
-    var zDirection: vector_float3 {
-        normalize(vector_float3(columns.2.x, columns.2.y, columns.2.z))
-    }
-    
     var xDirection: vector_float3 {
         normalize(vector_float3(columns.0.x, columns.0.y, columns.0.z))
+    }
+    
+    var yDirection: vector_float3 {
+        normalize(vector_float3(columns.1.x, columns.1.y, columns.1.z))
+    }
+    
+    var zDirection: vector_float3 {
+        normalize(vector_float3(columns.2.x, columns.2.y, columns.2.z))
     }
     
     var ifcAxis2Placement3D: IFC4X3.IfcAxis2Placement3D {
