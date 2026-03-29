@@ -42,6 +42,10 @@ public struct STEPEncoder {
             idMap[ObjectIdentifier(entity)] = index + 1
         }
 
+        // 2.5 Deduplicate leaf entities with identical content.
+        let toRemove = deduplicateLeafEntities(entities: allEntities, idMap: &idMap)
+        allEntities.removeAll { toRemove.contains(ObjectIdentifier($0)) }
+
         // 3. Build output.
         var output = ""
         output.reserveCapacity(allEntities.count * 120)
@@ -97,9 +101,13 @@ public struct STEPEncoder {
             }
         }
 
-        // Rebuild the ordered list of all entities by ID.
+        // Deduplicate leaf entities with identical content.
+        let toRemoveFromFile = deduplicateLeafEntities(entities: additionalEntities, idMap: &idMap)
+
+        // Rebuild the ordered list of all entities by ID, excluding deduplicated ones.
         let allByID = idMap.sorted { $0.value < $1.value }
         let allEntities: [(Int, IFC4X3.Entity)] = allByID.compactMap { oid, stepID in
+            if toRemoveFromFile.contains(oid) { return nil }
             if let entity = additionalEntities.first(where: { ObjectIdentifier($0) == oid }) {
                 return (stepID, entity)
             }
@@ -449,5 +457,83 @@ public struct STEPEncoder {
             return s + "."
         }
         return s
+    }
+
+    // MARK: - Leaf Entity Deduplication
+
+    /// Finds leaf entities (those with no entity-reference attributes) that have
+    /// identical STEP content, remaps duplicates to the canonical (lowest-ID)
+    /// instance, and returns the set of `ObjectIdentifier`s to remove.
+    private func deduplicateLeafEntities(
+        entities: [IFC4X3.Entity],
+        idMap: inout [ObjectIdentifier: Int]
+    ) -> Set<ObjectIdentifier> {
+        // Group leaf entities by their serialized content key.
+        var contentGroups: [String: [(oid: ObjectIdentifier, stepID: Int, entity: IFC4X3.Entity)]] = [:]
+        for entity in entities {
+            let oid = ObjectIdentifier(entity)
+            guard let stepID = idMap[oid], isLeafEntity(entity) else { continue }
+            let key = contentKey(for: entity)
+            contentGroups[key, default: []].append((oid, stepID, entity))
+        }
+
+        var toRemove = Set<ObjectIdentifier>()
+        for (_, group) in contentGroups where group.count > 1 {
+            // Keep the instance with the lowest STEP ID as canonical.
+            let sorted = group.sorted { $0.stepID < $1.stepID }
+            let canonical = sorted[0]
+            for duplicate in sorted.dropFirst() {
+                let typeName = String(describing: type(of: duplicate.entity))
+                print("[STEPEncoder] Warning: Merging duplicate \(typeName) #\(duplicate.stepID) → #\(canonical.stepID)")
+                // Remap the duplicate's ObjectIdentifier to point at the canonical ID.
+                idMap[duplicate.oid] = canonical.stepID
+                toRemove.insert(duplicate.oid)
+            }
+        }
+        return toRemove
+    }
+
+    /// Returns `true` if the entity's STEP attributes contain no entity references,
+    /// making it safe to deduplicate by content alone.
+    private func isLeafEntity(_ entity: IFC4X3.Entity) -> Bool {
+        let chain = descriptorChain(for: entity)
+        for (descriptor, _) in chain {
+            for localIndex in 0..<descriptor.ownAttributes.count {
+                let value = descriptor.getter(entity, localIndex)
+                if containsEntityRef(value) { return false }
+            }
+        }
+        return true
+    }
+
+    /// Recursively checks whether a `STEPValue` contains an entity reference.
+    private func containsEntityRef(_ value: STEPValue) -> Bool {
+        switch value {
+        case .entityRef:
+            return true
+        case .list(let items):
+            return items.contains { containsEntityRef($0) }
+        case .select(_, let inner):
+            return containsEntityRef(inner)
+        default:
+            return false
+        }
+    }
+
+    /// Produces a string key that uniquely identifies the STEP content of a leaf
+    /// entity (type name + all attribute values). Two entities with the same key
+    /// are guaranteed to produce identical STEP output lines.
+    private func contentKey(for entity: IFC4X3.Entity) -> String {
+        let chain = descriptorChain(for: entity)
+        guard let leafDesc = chain.last?.0 else { return "" }
+        var parts = [leafDesc.stepTypeName]
+        for (descriptor, _) in chain {
+            for localIndex in 0..<descriptor.ownAttributes.count {
+                let value = descriptor.getter(entity, localIndex)
+                // Encode with an empty idMap — leaf entities have no entity refs.
+                parts.append(encodeValue(value, idMap: [:]))
+            }
+        }
+        return parts.joined(separator: "|")
     }
 }
